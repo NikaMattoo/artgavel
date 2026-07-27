@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#f5f1e8">
+<meta name="description" content="ARTGAVEL — ქართული ხელოვნების ონლაინ აუქციონი. ორიგინალური ნამუშევრები უშუალოდ მხატვრებისგან.">
+<meta property="og:title" content="ARTGAVEL · ქართული ხელოვნების აუქციონი">
+<meta property="og:description" content="ორიგინალური ხელოვნება უშუალოდ ქართველი მხატვრებისგან — გამჭვირვალე და სამართლიანი აუქციონი.">
+<meta property="og:image" content="https://nikamattoo.github.io/artgavel/hero1.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nikamattoo.github.io/artgavel/">
+<link rel="canonical" href="https://nikamattoo.github.io/artgavel/">
+<meta name="robots" content="index,follow">
+<meta name="keywords" content="ქართული ხელოვნება, აუქციონი, ნახატები, მხატვრები, Georgian art auction, Tbilisi art, buy paintings Georgia">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"ARTGAVEL","alternateName":"ქართული ხელოვნების აუქციონი","url":"https://nikamattoo.github.io/artgavel/","description":"ონლაინ აუქციონი ორიგინალური ქართული ხელოვნებისთვის — უშუალოდ მხატვრებისგან.","inLanguage":"ka"}
+</script>
+<title>ARTGAVEL · ქართული ხელოვნების აუქციონი</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Great+Vibes&family=Noto+Sans+Georgian:wght@400;500;600;700&family=Noto+Serif+Georgian:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+:root{
+  --bg:#f5f1e8; --bg-soft:#fdfbf6; --bg-deep:#ece6d8;
+  --ink:#2b2620; --ink-soft:#7a7263; --line:#e0d8c8;
+  --gilt:#a8842e; --gilt-deep:#8a6b1f; --oxblood:#8e2f2a; --taupe:#9c8f7a;
+  --radius:12px; --shadow:0 8px 30px rgba(43,38,32,.08);
+  color-scheme:only light;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:#f5f1e8 !important}
+body{background:#f5f1e8 !important;color:var(--ink);font-family:'Noto Sans Georgian',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+@media (prefers-color-scheme:dark){html,body{background:#f5f1e8 !important;color:#2b2620 !important}}
+.anton{font-family:'Anton',sans-serif}
+.script{font-family:'Great Vibes',cursive;color:var(--gilt)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea,select{font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--bg)}
+svg.ic{width:1.05em;height:1.05em;vertical-align:-.16em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ic-lg{width:1.5rem;height:1.5rem;color:var(--gilt-deep)}
+
+.btn{border-radius:999px;padding:10px 22px;font-weight:600;font-size:.87rem;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn-ink{background:var(--ink);color:var(--bg-soft)}
+.btn-ink:hover{background:#443c32}
+.btn-line{border:1.5px solid var(--ink)}
+.btn-line:hover{background:var(--ink);color:var(--bg-soft)}
+.btn-bid{background:var(--oxblood);color:#faf3f2}
+.btn-bid:hover{background:#a63a34}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:6px 14px;font-size:.78rem}
+.danger{color:var(--oxblood);border-color:#d8b5b2}
+
+header{position:sticky;top:0;z-index:60;background:rgba(245,241,232,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:13px 20px}
+.logo{font-family:'Anton';font-size:1.4rem;display:flex;align-items:baseline;gap:7px;cursor:pointer;flex-shrink:0}
+.logo .script{font-size:1.25rem;transform:translateY(2px)}
+.nav-links{display:flex;gap:18px;font-size:.84rem;color:var(--ink-soft)}
+.nav-links a{cursor:pointer;padding-bottom:2px;border-bottom:2px solid transparent;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.nav-links a.on,.nav-links a:hover{color:var(--ink);border-color:var(--gilt)}
+.nav-right{margin-left:auto;display:flex;gap:9px;align-items:center}
+.burger{display:none;font-size:1.3rem;padding:4px 8px}
+#m-menu{display:none;flex-direction:column;background:var(--bg-soft);border-bottom:1px solid var(--line);padding:10px 20px}
+#m-menu a{padding:11px 0;font-size:.95rem;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
+#m-menu a:last-child{border:none}
+#m-menu.open{display:flex}
+.mode-pill{font-size:.66rem;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:var(--bg-deep);color:var(--ink-soft);cursor:pointer}
+/* notifications */
+.bell-wrap{position:relative}
+#bell-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);display:none;align-items:center;justify-content:center;color:var(--ink-soft);position:relative}
+#bell-btn.show{display:flex}
+#bell-btn:hover{border-color:var(--gilt);color:var(--gilt-deep)}
+#bell-count{position:absolute;top:-4px;right:-4px;min-width:19px;height:19px;border-radius:999px;background:var(--oxblood);color:#faf3f2;font-size:.64rem;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 5px}
+#bell-count.show{display:flex}
+/* account avatar menu */
+.acct-wrap{position:relative}
+#acct-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(140deg,var(--gilt),var(--oxblood));color:#fdfbf6;font-weight:700;font-size:.82rem;display:none;align-items:center;justify-content:center;letter-spacing:.02em;flex-shrink:0}
+#acct-btn.show{display:flex}
+#acct-menu{position:absolute;top:48px;right:0;min-width:190px;background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 44px rgba(43,38,32,.2);display:none;z-index:72;overflow:hidden}
+#acct-menu.open{display:block}
+#acct-menu .amhead{padding:12px 15px;border-bottom:1px solid var(--line)}
+#acct-menu .amhead b{font-size:.86rem;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#acct-menu .amhead span{font-size:.7rem;color:var(--ink-soft)}
+#acct-menu button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:11px 15px;font-size:.85rem;border-bottom:1px solid #f1ece0}
+#acct-menu button:last-child{border:none}
+#acct-menu button:hover{background:#f7f2e6}
+#notif-panel{position:absolute;top:48px;right:0;width:330px;max-width:88vw;background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 50px rgba(43,38,32,.22);display:none;z-index:70;overflow:hidden}
+#notif-panel.open{display:block}
+#notif-panel .nhead{padding:12px 16px;border-bottom:1px solid var(--line);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);display:flex;justify-content:space-between;align-items:center}
+#notif-panel .nhead button{font-size:.7rem;color:var(--gilt-deep)}
+.nlist{max-height:60vh;overflow-y:auto}
+.nitem{display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid #f1ece0;cursor:pointer;align-items:flex-start}
+.nitem:hover{background:#f7f2e6}
+.nitem.unread{background:#f9f3e3}
+.nitem .nic{width:30px;height:30px;border-radius:50%;background:var(--bg-deep);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gilt-deep)}
+.nitem.urgent .nic{background:#f2e0de;color:var(--oxblood)}
+.nitem b{font-size:.83rem;display:block;line-height:1.35}
+.nitem p{font-size:.75rem;color:var(--ink-soft);margin-top:1px}
+.nitem .nt{font-size:.66rem;color:var(--ink-soft);margin-top:3px}
+.nempty{padding:26px 16px;text-align:center;font-size:.82rem;color:var(--ink-soft)}
+.mode-pill.live{background:#e7f0e2;color:#3f6b3a}
+
+.page{display:none;animation:fade .28s ease}
+.page.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+section{padding:44px 0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.sec-head h2{font-family:'Anton';font-size:1.6rem;text-transform:uppercase}
+.sec-head .script{font-size:1.5rem}
+.alt{background:var(--bg-deep)}
+
+.hero{padding:54px 0 44px;text-align:center;position:relative;overflow:hidden;border-radius:0 0 22px 22px}
+.hero-band{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-track{position:absolute;top:50%;left:0;transform:translateY(-50%);display:flex;gap:14px;width:max-content;animation:heroScroll 70s linear infinite;filter:blur(2.2px) saturate(.95);opacity:.68}
+.hero-track img{height:150%;min-height:420px;width:auto;object-fit:cover;border-radius:6px}
+@keyframes heroScroll{from{transform:translate(0,-50%)}to{transform:translate(-50%,-50%)}}
+.hero-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(245,241,232,.68),rgba(245,241,232,.42) 45%,rgba(245,241,232,.78))}
+.hero-grain{position:absolute;inset:0;z-index:2;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E")}
+.hero-inner{position:relative;z-index:3}
+@media(prefers-reduced-motion:reduce){.hero-track{animation:none}}
+/* music player */
+#music-pill{position:fixed;bottom:18px;left:18px;z-index:80;background:var(--ink);color:var(--bg-soft);border-radius:999px;padding:8px;display:none;align-items:center;gap:9px;box-shadow:0 10px 30px rgba(43,38,32,.35);max-width:72vw;transition:padding .2s}
+#music-pill.show{display:flex}
+#music-pill.open{padding:8px 14px 8px 8px}
+#music-pill .mtitle,#music-pill .mnext{display:none}
+#music-pill.open .mtitle,#music-pill.open .mnext{display:flex}
+#music-pill button{width:34px;height:34px;border-radius:50%;background:var(--gilt);color:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#music-pill .mtitle{font-size:.74rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;align-items:center;gap:5px}
+#music-pill .mtitle i{font-family:'Great Vibes';font-style:normal;color:#d8bb6a;font-size:.95rem;margin-right:5px}
+#music-pill .mnext{background:transparent;color:var(--bg-soft);width:26px;height:26px}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px;margin-right:2px}
+.eq i{width:2.5px;background:#d8bb6a;animation:eqb 1s ease-in-out infinite;border-radius:2px}
+.eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}
+@keyframes eqb{0%,100%{height:4px}50%{height:12px}}
+/* deal tracker */
+.deal-box{margin-top:16px;background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--gilt);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.deal-box h3{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:12px}
+.deal-steps{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.dstep{flex:1;min-width:90px;text-align:center;font-size:.68rem;color:var(--ink-soft);padding:7px 4px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
+.dstep.done{background:#f4ecd6;color:var(--gilt-deep);border-color:#e2cf95;font-weight:700}
+.pay-reveal{background:#f7f2e2;border:1px dashed var(--gilt);border-radius:9px;padding:12px 14px;font-size:.86rem;white-space:pre-line;margin-bottom:12px}
+.stars-pick{display:flex;gap:6px;font-size:1.4rem;color:var(--gilt);cursor:pointer;margin:8px 0}
+.stars-pick svg{width:1.4rem;height:1.4rem}
+.review-show{font-size:.86rem;color:#4d493f;background:var(--bg);border-radius:9px;padding:11px 14px}
+/* swipe deck */
+.deck-sec{padding:40px 0 10px}
+.deck-wrap{position:relative;max-width:380px;margin:0 auto;height:480px}
+.deck-card{position:absolute;inset:0;background:var(--bg-soft);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(43,38,32,.18);touch-action:none;user-select:none;transition:transform .3s,opacity .3s}
+.deck-card.dragging{transition:none}
+.deck-card .di{height:72%;background:var(--bg-deep) center/cover}
+.deck-card .db{padding:14px 18px}
+.deck-card h3{font-family:'Noto Serif Georgian';font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-card .by{font-size:.78rem;color:var(--ink-soft)}
+.deck-card .dp{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.deck-card .dp b{font-family:'Anton';font-size:1.3rem}
+.deck-card .dp span{font-size:.7rem;color:var(--oxblood);font-weight:700}
+.deck-stamp{position:absolute;top:24px;font-family:'Anton';font-size:1.6rem;padding:4px 16px;border:3px solid;border-radius:10px;transform:rotate(-14deg);opacity:0;pointer-events:none;letter-spacing:.05em}
+.deck-stamp.like{left:18px;color:var(--gilt-deep);border-color:var(--gilt-deep)}
+.deck-stamp.skip{right:18px;color:var(--taupe);border-color:var(--taupe);transform:rotate(14deg)}
+.deck-btns{display:flex;gap:18px;justify-content:center;margin-top:18px}
+.deck-btns button{width:58px;height:58px;border-radius:50%;background:var(--bg-soft);border:1.5px solid var(--line);font-size:1.3rem;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);transition:.15s}
+.deck-btns .d-skip:hover{border-color:var(--taupe);color:var(--taupe)}
+.deck-btns .d-like{color:var(--gilt-deep)}
+.deck-btns .d-like:hover{border-color:var(--gilt);background:#faf4e2}
+.deck-btns .d-open{font-size:1rem}
+.deck-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--ink-soft);border:2px dashed var(--line);border-radius:18px;text-align:center;padding:20px}
+.hero .script{font-size:2.2rem;display:block}
+.hero h1{font-family:'Anton';font-size:clamp(2.1rem,6vw,3.9rem);text-transform:uppercase;line-height:1.06}
+.hero p{color:var(--ink-soft);max-width:58ch;margin:15px auto 24px;font-size:.97rem}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-strip{display:flex;justify-content:center;gap:32px;margin-top:34px;flex-wrap:wrap}
+.hs{text-align:center}
+.hs b{font-family:'Anton';font-size:1.6rem;display:block}
+.hs span{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+
+.toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.toolbar input{flex:1;min-width:200px;border:1px solid var(--line);border-radius:999px;padding:10px 18px;background:var(--bg-soft)}
+.toolbar input:focus{outline:none;border-color:var(--gilt)}
+.toolbar select{border:1px solid var(--line);border-radius:999px;padding:10px 16px;background:var(--bg-soft)}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:.8rem;background:var(--bg-soft);transition:.15s;display:inline-flex;gap:6px;align-items:center}
+.chip.on{background:var(--ink);color:var(--bg-soft);border-color:var(--ink)}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{background:var(--bg-soft);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:.22s;cursor:pointer;border:1px solid var(--line);position:relative}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(43,38,32,.14)}
+.card-img{aspect-ratio:1/1;position:relative;background:var(--bg-deep) center/cover no-repeat}
+.badge{position:absolute;top:12px;left:12px;font-size:.66rem;font-weight:700;letter-spacing:.05em;padding:5px 12px;border-radius:999px;background:var(--oxblood);color:#faf3f2;z-index:2}
+.badge.ended{background:var(--taupe)}
+.badge.sold{background:var(--gilt-deep)}
+.watch-star{position:absolute;top:10px;right:10px;z-index:3;width:34px;height:34px;border-radius:50%;background:rgba(253,251,246,.92);font-size:1rem;line-height:34px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center}
+.watch-star.on{color:var(--gilt-deep)}
+.photo-count{position:absolute;bottom:12px;right:12px;background:rgba(43,38,32,.7);color:#fdfbf6;font-size:.68rem;border-radius:999px;padding:3px 10px;display:flex;gap:5px;align-items:center}
+.card-body{padding:16px}
+.card-body h3{font-family:'Noto Serif Georgian';font-size:1.04rem;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-body .by{font-size:.78rem;color:var(--ink-soft);margin-bottom:11px}
+.card-body .by i{font-family:'Great Vibes';font-style:normal;font-size:1.05rem;color:var(--gilt);margin-right:4px}
+.card-price{display:flex;justify-content:space-between;align-items:center}
+.card-price b{font-family:'Anton';font-size:1.25rem}
+.card-price span{font-size:.7rem;color:var(--oxblood);font-weight:700}
+.card-foot{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:13px;padding-top:11px;font-size:.72rem;color:var(--ink-soft)}
+.empty{padding:44px 20px;text-align:center;color:var(--ink-soft);border:2px dashed var(--line);border-radius:var(--radius);grid-column:1/-1}
+
+.crumbs{font-size:.78rem;color:var(--ink-soft);padding:20px 0 0}
+.crumbs a{color:var(--gilt-deep);cursor:pointer}
+.lot{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;padding:22px 0 42px;align-items:start}
+.lot-art{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.lot-main-img{aspect-ratio:1/1;background:var(--bg-deep) center/contain no-repeat;box-shadow:0 12px 34px rgba(43,38,32,.2);position:relative;border-radius:4px}
+.thumbs{display:flex;gap:10px;margin-top:13px;flex-wrap:wrap}
+.thumb{width:62px;height:62px;border-radius:8px;background:var(--bg-deep) center/cover;cursor:pointer;border:2px solid transparent;transition:.15s}
+.thumb.on{border-color:var(--gilt)}
+.reactions-row{display:flex;gap:8px;margin-top:16px;justify-content:center;flex-wrap:wrap}
+.rx{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:.88rem;display:flex;gap:7px;align-items:center;transition:.15s}
+.rx:hover{transform:scale(1.05);border-color:var(--gilt)}
+.rx span{font-size:.72rem;color:var(--ink-soft)}
+.floater{position:absolute;bottom:30px;font-size:1.5rem;animation:floatUp 2.2s ease-out forwards;pointer-events:none;z-index:5}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translateY(-230px) scale(1.25)}}
+.live-line{display:flex;align-items:center;gap:9px;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;flex-wrap:wrap}
+.live-dot{width:9px;height:9px;border-radius:50%;background:var(--oxblood);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(142,47,42,.5)}70%{box-shadow:0 0 0 10px rgba(142,47,42,0)}100%{box-shadow:0 0 0 0 rgba(142,47,42,0)}}
+#lot-title{font-family:'Noto Serif Georgian';font-size:1.8rem;line-height:1.2}
+.lot-artist{font-size:1rem;color:var(--ink-soft);margin:4px 0 2px;cursor:pointer}
+.lot-artist .script{font-size:1.45rem;margin-right:5px}
+.lot-artist u{text-decoration-color:var(--gilt);text-underline-offset:3px}
+.lot-meta{font-size:.8rem;color:var(--ink-soft);margin-bottom:8px}
+.lot-desc{font-size:.9rem;color:#514a3e;margin-bottom:16px;max-width:60ch;white-space:pre-line}
+.bid-box{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.countdown{display:flex;gap:10px;margin-bottom:15px}
+.cd-cell{text-align:center;flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 4px}
+.cd-cell b{font-family:'Anton';font-size:1.5rem;display:block}
+.cd-cell span{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.price-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:13px}
+.price-row .cur{font-family:'Anton';font-size:2.2rem}
+.price-row .lbl{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.price-row .step{font-size:.78rem;color:var(--ink-soft);text-align:right}
+.bid-actions{display:flex;gap:9px}
+.bid-actions .btn-bid{flex:1;padding:13px;font-size:.98rem;border-radius:9px}
+.icon-btn{border:1.5px solid var(--line);border-radius:9px;padding:12px 15px;color:var(--ink-soft);font-size:1rem;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn:hover,.icon-btn.on{border-color:var(--gilt);color:var(--gilt-deep)}
+.trust-inline{display:flex;gap:14px;margin-top:13px;font-size:.7rem;color:var(--ink-soft);flex-wrap:wrap}
+.trust-inline span{display:inline-flex;gap:5px;align-items:center}
+.notice{margin-top:9px;font-size:.78rem;color:var(--gilt-deep);min-height:1.2em;font-weight:600}
+.bid-feed{margin-top:16px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.bid-feed h3{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);padding:11px 17px;border-bottom:1px solid var(--line)}
+.bid-row{display:flex;justify-content:space-between;padding:10px 17px;font-size:.85rem;border-bottom:1px solid #f1ece0}
+.bid-row:last-child{border:none}
+.bid-row.top{background:#f7efdb}
+.bid-row .who{color:var(--ink-soft)}
+.bid-row.top .who{color:var(--gilt-deep);font-weight:600}
+.bid-row .amt{font-weight:700}
+.owner-tools{margin-top:14px;display:flex;gap:9px}
+
+.comments{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:48px}
+.comment{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f1ece0}
+.comment:last-of-type{border:none}
+.c-av{width:37px;height:37px;border-radius:50%;background:var(--bg-deep);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--taupe)}
+.comment b{font-size:.85rem;cursor:pointer}
+.comment .time{font-size:.68rem;color:var(--ink-soft);margin-left:8px}
+.comment p{font-size:.87rem;color:#514a3e;margin:2px 0}
+.c-input{display:flex;gap:9px;margin-top:13px}
+.c-input input{flex:1;border:1px solid var(--line);border-radius:999px;padding:11px 17px;background:var(--bg)}
+.c-input input:focus{outline:none;border-color:var(--gilt)}
+
+.narrow{max-width:720px;margin:0 auto;padding:34px 20px 56px}
+.panel{background:var(--bg-soft);border:1px solid var(--line);border-radius:16px;padding:30px;box-shadow:var(--shadow)}
+.panel h1{font-family:'Anton';font-size:1.7rem;text-transform:uppercase;margin-bottom:2px}
+.panel .script{font-size:1.55rem;display:block;margin-bottom:18px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--gilt)}
+.field textarea{min-height:88px;resize:vertical}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.uploader{border:2px dashed var(--line);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:.2s;background:var(--bg)}
+.uploader:hover,.uploader.drag{border-color:var(--gilt);background:#faf6ea}
+.uploader p{font-size:.8rem;color:var(--ink-soft)}
+.uploader b{color:var(--gilt-deep)}
+.previews{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:13px}
+.prev{aspect-ratio:1;border-radius:9px;background:var(--bg-deep) center/cover;position:relative;border:1px solid var(--line)}
+.prev .del{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(43,38,32,.75);color:#fdfbf6;font-size:.68rem;line-height:22px;text-align:center}
+.prev .main-tag{position:absolute;bottom:4px;left:4px;background:var(--gilt);color:#fdfbf6;font-size:.56rem;padding:2px 7px;border-radius:999px;font-weight:700}
+.hint{font-size:.74rem;color:var(--ink-soft);margin-top:14px;text-align:center}
+
+/* auth modal */
+#auth-back{position:fixed;inset:0;background:rgba(43,38,32,.45);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+#auth-back.open{display:flex}
+.auth-card{background:var(--bg-soft);border-radius:16px;padding:30px;max-width:420px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.3);position:relative}
+.auth-card .close{position:absolute;top:14px;right:16px;font-size:1.1rem;color:var(--ink-soft)}
+.auth-tabs{display:flex;gap:6px;margin-bottom:20px;background:var(--bg-deep);border-radius:999px;padding:4px}
+.auth-tabs button{flex:1;border-radius:999px;padding:9px;font-weight:600;font-size:.84rem}
+.auth-tabs button.on{background:var(--bg-soft);box-shadow:var(--shadow)}
+.role-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.role-opt{border:1.5px solid var(--line);border-radius:11px;padding:13px;text-align:center;cursor:pointer;transition:.15s}
+.role-opt.on{border-color:var(--gilt);background:#faf6ea}
+.role-opt b{display:block;font-size:.86rem}
+.role-opt span{font-size:.7rem;color:var(--ink-soft)}
+.auth-err{color:var(--oxblood);font-size:.78rem;min-height:1.2em;margin-bottom:8px}
+
+/* artist page */
+.cover{height:210px;border-radius:0 0 18px 18px;position:relative;background-size:cover;background-position:center;background-image:
+  radial-gradient(ellipse 70% 90% at 20% 60%,rgba(168,132,46,.22) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 80% at 80% 30%,rgba(142,47,42,.16) 0%,transparent 60%),
+  linear-gradient(150deg,#e8e0cf,#d9cfba)}
+.cover .cover-edit{position:absolute;right:14px;bottom:14px;background:rgba(43,38,32,.78);color:var(--bg-soft);border-radius:999px;padding:8px 15px;font-size:.76rem;font-weight:600;display:none;align-items:center;gap:7px}
+.cover.editable .cover-edit{display:inline-flex}
+.artist-top{display:flex;gap:22px;align-items:flex-end;margin-top:-58px;padding:0 8px;flex-wrap:wrap}
+.avatar{width:118px;height:118px;border-radius:50%;background:linear-gradient(140deg,var(--gilt),var(--oxblood));padding:4px;flex-shrink:0;position:relative}
+.avatar div{width:100%;height:100%;border-radius:50%;background:var(--bg-deep) center/cover no-repeat;border:4px solid var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:2.4rem;color:var(--taupe)}
+.avatar.editable{cursor:pointer}
+.avatar .cam{position:absolute;right:2px;bottom:2px;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--bg-soft);display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
+.avatar.editable .cam{display:flex}
+#acct-btn{background-size:cover;background-position:center}
+.lb-av{background-size:cover;background-position:center}
+.c-av{background-size:cover;background-position:center}
+.artist-id{padding-bottom:4px}
+.artist-id h1{font-family:'Noto Serif Georgian';font-size:1.7rem;line-height:1.15}
+.badge-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.a-badge{display:inline-flex;gap:6px;align-items:center;font-size:.7rem;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--bg-deep);color:var(--ink-soft);border:1px solid var(--line)}
+.a-badge.gold{background:#f4e8c8;color:var(--gilt-deep);border-color:#e2cf95}
+.a-badge.ox{background:#f2e0de;color:var(--oxblood);border-color:#e0bcb8}
+.artist-actions{margin-left:auto;display:flex;gap:9px;padding-bottom:8px}
+.artist-stats{display:flex;gap:28px;margin:22px 0 6px;flex-wrap:wrap}
+.artist-stats div b{font-family:'Anton';font-size:1.35rem;display:block}
+.artist-stats div span{font-size:.66rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em}
+.about-card{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--gilt);border-radius:var(--radius);padding:24px 26px;margin:20px 0 36px;box-shadow:var(--shadow)}
+.about-card h3{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:9px}
+.about-card .bio-text{font-size:.92rem;color:#4d493f;max-width:74ch;white-space:pre-line;min-height:1.4em}
+.about-card textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:8px}
+
+/* leaderboard */
+.lb-tabs{display:flex;gap:8px;margin-bottom:22px}
+.lb-row{display:flex;align-items:center;gap:14px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;margin-bottom:10px;cursor:pointer;transition:.15s}
+.lb-row:hover{border-color:var(--gilt)}
+.lb-rank{font-family:'Anton';font-size:1.3rem;width:38px;text-align:center;color:var(--ink-soft)}
+.lb-rank.r1{color:var(--gilt-deep)}
+.lb-rank.r2{color:#8b8578}
+.lb-rank.r3{color:#a6673d}
+.lb-av{width:44px;height:44px;border-radius:50%;background:var(--bg-deep);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--taupe);flex-shrink:0}
+.lb-name{flex:1;min-width:0}
+.lb-name b{display:block;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-name .badge-row{margin-top:3px}
+.lb-score{text-align:right}
+.lb-score b{font-family:'Anton';font-size:1.15rem;display:block}
+.lb-score span{font-size:.64rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+
+/* chat */
+.chat-layout{display:grid;grid-template-columns:300px 1fr;gap:0;background:var(--bg-soft);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-height:480px;margin:26px 0 56px;box-shadow:var(--shadow)}
+.chat-list{border-right:1px solid var(--line);overflow-y:auto;max-height:70vh}
+.chat-item{padding:14px 16px;border-bottom:1px solid #f1ece0;cursor:pointer;display:flex;gap:11px;align-items:center}
+.chat-item:hover,.chat-item.on{background:#f7f2e6}
+.chat-item b{font-size:.86rem;display:block}
+.chat-item p{font-size:.74rem;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
+.chat-main{display:flex;flex-direction:column}
+.chat-head{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:600;font-size:.9rem;display:flex;gap:8px;align-items:center}
+.chat-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:9px;max-height:52vh}
+.msg{max-width:75%;padding:9px 14px;border-radius:14px;font-size:.86rem}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--bg-soft);border-bottom-right-radius:4px}
+.msg.them{align-self:flex-start;background:var(--bg-deep);border-bottom-left-radius:4px}
+.msg .mt{display:block;font-size:.62rem;opacity:.6;margin-top:2px}
+.chat-input{display:flex;gap:9px;padding:13px;border-top:1px solid var(--line)}
+.chat-input input{flex:1;border:1px solid var(--line);border-radius:999px;padding:11px 16px}
+.chat-input input:focus{outline:none;border-color:var(--gilt)}
+.chat-empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:.88rem;padding:30px;text-align:center}
+
+/* docs */
+.doc{max-width:820px;margin:0 auto;padding:40px 20px 60px}
+.doc h1{font-family:'Anton';font-size:1.9rem;text-transform:uppercase;margin-bottom:4px}
+.doc .script{font-size:1.7rem;display:block;margin-bottom:24px}
+.doc h2{font-family:'Noto Serif Georgian';font-size:1.15rem;margin:26px 0 8px}
+.doc p,.doc li{font-size:.9rem;color:#4d493f}
+.doc ul,.doc ol{padding-left:20px;margin:8px 0}
+.doc .small{font-size:.76rem;color:var(--ink-soft);margin-top:30px}
+.doc code{background:var(--bg-deep);border-radius:5px;padding:2px 7px;font-size:.8rem;word-break:break-all}
+.doc pre{background:#2b2620;color:#e8e2d4;border-radius:10px;padding:16px;font-size:.72rem;overflow-x:auto;margin:10px 0;line-height:1.5}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:24px 0}
+.stepc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.stepc .n{font-family:'Great Vibes';font-size:2rem;color:var(--gilt)}
+.stepc h4{font-size:.95rem;margin:4px 0 6px;display:flex;gap:8px;align-items:center}
+.stepc p{font-size:.8rem}
+.faq-item{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px}
+.faq-item b{display:block;font-size:.92rem;margin-bottom:5px}
+.faq-item p{font-size:.85rem;color:#4d493f}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.trust-card{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.trust-card h4{font-size:.92rem;margin:9px 0 5px}
+.trust-card p{font-size:.78rem;color:var(--ink-soft)}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--bg-soft);padding:12px 24px;border-radius:999px;font-size:.85rem;transition:.3s;z-index:99;opacity:0;max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%);opacity:1}
+
+footer{border-top:1px solid var(--line);padding:30px 20px;text-align:center;font-size:.75rem;color:var(--ink-soft)}
+footer .flinks{display:flex;gap:18px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+footer .flinks a{cursor:pointer}
+footer .flinks a:hover{color:var(--gilt-deep)}
+
+@media(max-width:920px){
+  .hero-track img{min-height:260px;height:120%}
+  .hero-track{gap:10px}
+  .grid{grid-template-columns:1fr 1fr}
+  .lot{grid-template-columns:1fr}
+  .trust-grid,.steps{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .burger{display:block}
+  .chat-layout{grid-template-columns:1fr}
+  .chat-list{max-height:200px;border-right:none;border-bottom:1px solid var(--line)}
+}
+@media(max-width:580px){
+  .grid,.trust-grid,.steps{grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+  .previews{grid-template-columns:repeat(3,1fr)}
+  .panel{padding:20px}
+  .artist-actions{margin-left:0}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo" onclick="nav('home')"><span class="anton">ARTGAVEL</span><span class="script">Tbilisi</span></div>
+    <nav class="nav-links">
+      <a data-nav="home" onclick="nav('home')">აუქციონები</a>
+      <a data-nav="sell" onclick="nav('sell')">გაყიდვა</a>
+      <a data-nav="board" onclick="nav('board')">ლიდერბორდი</a>
+      <a data-nav="chat" onclick="nav('chat')">ჩატი</a>
+      <a data-nav="how" onclick="nav('how')">წესები</a>
+    </nav>
+    <div class="nav-right">
+      <span class="mode-pill" id="mode-pill" onclick="nav('setup')">დემო</span>
+      <div class="bell-wrap">
+        <button id="bell-btn" onclick="toggleNotifs(event)"><span id="bell-count"></span></button>
+        <div id="notif-panel">
+          <div class="nhead"><span>შეტყობინებები</span><button onclick="markAllSeen()">წაკითხულად მონიშვნა</button></div>
+          <div class="nlist" id="notif-list"></div>
+        </div>
+      </div>
+      <button class="btn btn-line btn-sm" id="auth-btn" onclick="openAuth('in')">შესვლა</button>
+      <div class="acct-wrap">
+        <button id="acct-btn" onclick="toggleAcct(event)"></button>
+        <div id="acct-menu">
+          <div class="amhead"><b id="acct-name"></b><span id="acct-role"></span></div>
+          <button onclick="acctGo('profile')" id="acct-profile-btn"></button>
+          <button onclick="acctGo('chat')" id="acct-chat-btn"></button>
+          <button onclick="acctGo('sell')" id="acct-sell-btn"></button>
+          <button onclick="acctGo('out')" id="acct-out-btn"></button>
+        </div>
+      </div>
+      <button class="burger" onclick="document.getElementById('m-menu').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+  <div id="m-menu">
+    <a onclick="nav('home');mClose()">აუქციონები</a>
+    <a onclick="nav('sell');mClose()">გაყიდვა</a>
+    <a onclick="nav('board');mClose()">ლიდერბორდი</a>
+    <a onclick="nav('chat');mClose()">ჩატი</a>
+    <a onclick="nav('how');mClose()">წესები</a>
+    <a onclick="nav('setup');mClose()">პარამეტრები</a>
+  </div>
+</header>
+
+<!-- AUTH MODAL -->
+<div id="auth-back" onclick="if(event.target===this)closeAuth()">
+  <div class="auth-card">
+    <button class="close" onclick="closeAuth()">✕</button>
+    <div class="auth-tabs">
+      <button id="tab-in" class="on" onclick="authTab('in')">შესვლა</button>
+      <button id="tab-up" onclick="authTab('up')">რეგისტრაცია</button>
+    </div>
+    <div id="auth-up-extra" style="display:none">
+      <div class="field"><label>სახელი და გვარი</label><input id="au-name" maxlength="60" placeholder="მაგ. ნინო ბერიძე"></div>
+      <div class="role-row">
+        <div class="role-opt on" id="role-collector" onclick="setRole('collector')"><b>კოლექციონერი</b><span>ვყიდულობ და ვბიდავ</span></div>
+        <div class="role-opt" id="role-artist" onclick="setRole('artist')"><b>მხატვარი</b><span>ვყიდი ნამუშევრებს</span></div>
+      </div>
+    </div>
+    <div class="field"><label>ელფოსტა</label><input id="au-email" type="email" placeholder="you@example.com"></div>
+    <div class="field"><label>პაროლი</label><input id="au-pass" type="password" placeholder="მინ. 6 სიმბოლო"></div>
+    <div class="auth-err" id="auth-err"></div>
+    <button class="btn btn-ink" style="width:100%;padding:13px" id="auth-go" onclick="doAuth()">შესვლა</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page" id="p-home">
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-band">
+        <div class="hero-track" id="hero-track"></div>
+        <div class="hero-veil"></div>
+        <div class="hero-grain"></div>
+      </div>
+      <div class="hero-inner">
+      <span class="script">original art, honest bidding</span>
+      <h1>ქართული ხელოვნების<br>აუქციონი</h1>
+      <p>ორიგინალური ნამუშევრები უშუალოდ მხატვრებისგან — გამჭვირვალე ბიდებით, დაცული გარიგებით და ავთენტურობის გარანტიით.</p>
+      <div class="hero-cta">
+        <button class="btn btn-ink" onclick="document.getElementById('grid-anchor').scrollIntoView({behavior:'smooth'})">ნახე ლოტები</button>
+        <button class="btn btn-line" onclick="nav('sell')">ატვირთე ნამუშევარი</button>
+      </div>
+      <div class="hero-strip">
+        <div class="hs"><b id="stat-lots">0</b><span>ლოტი</span></div>
+        <div class="hs"><b id="stat-bids">0</b><span>ბიდი</span></div>
+        <div class="hs"><b id="stat-artists">0</b><span>მხატვარი</span></div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <section class="deck-sec">
+    <div class="wrap">
+      <div class="sec-head" style="justify-content:center;text-align:center"><h2>აღმოაჩინე</h2><span class="script">swipe right to fall in love</span></div>
+      <div class="deck-wrap" id="deck"></div>
+      <div class="deck-btns">
+        <button class="d-skip" onclick="deckSwipe(-1)" title="გამოტოვება">✕</button>
+        <button class="d-open" onclick="deckOpen()" title="ლოტის ნახვა" id="deck-open-btn"></button>
+        <button class="d-like" onclick="deckSwipe(1)" title="ჩემს სიაში" id="deck-like-btn"></button>
+      </div>
+      <div style="text-align:center;margin-top:12px"><a style="font-size:.8rem;color:var(--gilt-deep);cursor:pointer" onclick="setFilter('watch');document.getElementById('grid-anchor').scrollIntoView({behavior:'smooth'})" id="deck-fav-link"></a></div>
+    </div>
+  </section>
+  <section class="alt" id="grid-anchor">
+    <div class="wrap">
+      <div class="sec-head"><h2>აუქციონები</h2><span class="script">going, going, gone…</span></div>
+      <div class="toolbar">
+        <input id="search" placeholder="ძებნა — ნამუშევარი ან მხატვარი…" oninput="renderGrid()">
+        <select id="sort" onchange="renderGrid()">
+          <option value="ending">მალე სრულდება</option>
+          <option value="new">ახალი</option>
+          <option value="price-hi">ფასი: მაღალი</option>
+          <option value="price-lo">ფასი: დაბალი</option>
+          <option value="hot">ყველაზე აქტიური</option>
+        </select>
+      </div>
+      <div class="chip-row">
+        <button class="chip on" data-f="live" onclick="setFilter('live')">ლაივი</button>
+        <button class="chip" data-f="ended" onclick="setFilter('ended')">დასრულებული</button>
+        <button class="chip" data-f="all" onclick="setFilter('all')">ყველა</button>
+        <button class="chip" data-f="watch" onclick="setFilter('watch')">ჩემი სია</button>
+      </div>
+      <div class="grid" id="lot-grid"></div>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><h2>რატომ ARTGAVEL</h2><span class="script">trust, built in</span></div>
+      <div class="trust-grid" id="trust-grid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- LOT -->
+<div class="page" id="p-lot">
+  <div class="wrap">
+    <div class="crumbs"><a onclick="nav('home')">მთავარი</a> / <span id="crumb-title"></span></div>
+    <div class="lot">
+      <div>
+        <div class="lot-art">
+          <div class="lot-main-img" id="main-img"></div>
+          <div class="thumbs" id="thumbs"></div>
+          <div class="reactions-row" id="rx-row"></div>
+        </div>
+      </div>
+      <div>
+        <div class="live-line"><span class="live-dot" id="live-dot"></span><b id="live-word" style="color:var(--oxblood)">LIVE</b> · <span id="lot-ends"></span></div>
+        <h1 id="lot-title"></h1>
+        <div class="lot-artist" onclick="openArtistFromLot()"><span class="script">by</span> <u id="lot-artist"></u></div>
+        <div class="lot-meta" id="lot-meta"></div>
+        <div class="lot-desc" id="lot-desc"></div>
+        <div class="bid-box">
+          <div class="countdown">
+            <div class="cd-cell"><b id="cd-d">0</b><span>დღე</span></div>
+            <div class="cd-cell"><b id="cd-h">00</b><span>საათი</span></div>
+            <div class="cd-cell"><b id="cd-m">00</b><span>წუთი</span></div>
+            <div class="cd-cell"><b id="cd-s">00</b><span>წამი</span></div>
+          </div>
+          <div class="price-row">
+            <div><div class="lbl">მიმდინარე ფასი</div><div class="cur" id="price"></div></div>
+            <div class="step" id="step-info"></div>
+          </div>
+          <div class="bid-actions">
+            <button class="btn-bid btn" id="bidbtn" onclick="placeBid()"></button>
+            <button class="icon-btn" id="watch-btn" onclick="toggleWatch()"></button>
+            <button class="icon-btn" onclick="shareLot()" title="გაზიარება" id="share-btn"></button>
+            <button class="icon-btn" onclick="shareFB()" title="Facebook-ზე გაზიარება" style="font-weight:800;font-family:Georgia,serif;font-size:1.05rem">f</button>
+          </div>
+          <div class="notice" id="notice"></div>
+          <div class="trust-inline" id="lot-trust"></div>
+        </div>
+        <div class="deal-box" id="deal-box" style="display:none"></div>
+        <button class="btn btn-line btn-sm" id="msg-artist-btn" style="margin-top:12px" onclick="messageArtist()">მიწერე ავტორს</button>
+        <div class="bid-feed">
+          <h3>ბიდების ისტორია</h3>
+          <div id="feed"></div>
+        </div>
+        <div class="owner-tools" id="owner-tools" style="display:none">
+          <button class="btn btn-line btn-sm danger" onclick="deleteLot()">ლოტის წაშლა</button>
+        </div>
+      </div>
+    </div>
+    <div class="sec-head"><h2>დისკუსია</h2><span class="script">the room is talking</span></div>
+    <div class="comments">
+      <div id="comment-list"></div>
+      <div class="c-input">
+        <input id="comment-input" placeholder="დაწერე კომენტარი…" onkeydown="if(event.key==='Enter')addComment()">
+        <button class="btn btn-ink" onclick="addComment()">გაგზავნა</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SELL -->
+<div class="page" id="p-sell">
+  <div class="narrow">
+    <div class="panel" id="sell-panel">
+      <h1>ატვირთე ნამუშევარი</h1>
+      <span class="script">five minutes to your first auction</span>
+      <div id="sell-locked" style="display:none">
+        <p style="font-size:.9rem;color:var(--ink-soft);margin-bottom:16px" id="sell-locked-msg"></p>
+        <button class="btn btn-ink" onclick="openAuth('up')">რეგისტრაცია მხატვრად</button>
+      </div>
+      <div id="sell-form">
+        <div class="field">
+          <label>ფოტოები (მაქს. 5)</label>
+          <div class="uploader" id="drop" onclick="document.getElementById('file-in').click()">
+            <p><b>დააჭირე ან ჩააგდე ფოტოები</b><br><span id="up-count">0 / 5 ატვირთული</span> · პირველი ფოტო მთავარია · გადაათრიე რიგის შესაცვლელად</p>
+          </div>
+          <input type="file" id="file-in" accept="image/*" multiple hidden onchange="handleFiles(this.files)">
+          <div class="previews" id="previews"></div>
+        </div>
+        <div class="field"><label>ნამუშევრის სახელი *</label><input id="f-title" maxlength="80" placeholder="მაგ. „ყვავილები“"></div>
+        <div class="field"><label>აღწერა</label><textarea id="f-desc" maxlength="1200" placeholder="ისტორია ნამუშევრის უკან, ტექნიკა, შთაგონება…"></textarea></div>
+        <div class="field-row">
+          <div class="field"><label>მასალა</label><input id="f-medium" placeholder="ზეთი, ტილო"></div>
+          <div class="field"><label>ზომა</label><input id="f-size" placeholder="50 × 50 სმ"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>საწყისი ფასი (₾) *</label><input id="f-start" type="number" min="1" placeholder="150"></div>
+          <div class="field"><label>ბიდის ბიჯი (₾) *</label><input id="f-step" type="number" min="1" placeholder="20"></div>
+        </div>
+        <div class="field"><label>გადახდის დეტალები · გამარჯვებული დაინახავს *</label>
+          <textarea id="f-pay" maxlength="400" style="min-height:66px" placeholder="მაგ. TBC ანგარიში GE00TB0000000000000000, მიმღები: სახელი გვარი. ან: გადახდა კურიერთან ადგილზე."></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>ხანგრძლივობა</label>
+            <select id="f-dur">
+              <option value="1">1 საათი</option><option value="6">6 საათი</option>
+              <option value="24" selected>24 საათი</option><option value="48">48 საათი</option>
+              <option value="72">3 დღე</option><option value="168">7 დღე</option>
+            </select>
+          </div>
+          <div class="field"><label>ლოკაცია</label><input id="f-loc" placeholder="თბილისი"></div>
+        </div>
+        <button class="btn btn-ink" style="width:100%;padding:14px;font-size:1rem" id="publish-btn" onclick="publishLot()">გამოაქვეყნე აუქციონი</button>
+        <div class="hint">გამოქვეყნებით ეთანხმები <a onclick="nav('how')" style="color:var(--gilt-deep);cursor:pointer">წესებსა და პირობებს</a> — ადასტურებ, რომ ნამუშევრის ავტორი ან უფლებამოსილი გამყიდველი ხარ.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTIST -->
+<div class="page" id="p-artist">
+  <div class="wrap">
+    <div class="cover" id="a-cover"><button class="cover-edit" onclick="coverClick()" id="cover-edit-btn"></button></div>
+    <input type="file" id="cover-in" accept="image/*" hidden onchange="handleCover(this.files[0])">
+    <div class="artist-top">
+      <div class="avatar" id="a-avatar" onclick="avatarClick()"><div id="a-initial">A</div><span class="cam" id="a-cam"></span></div>
+      <input type="file" id="avatar-in" accept="image/*" hidden onchange="handleAvatar(this.files[0])">
+      <div class="artist-id">
+        <div style="font-size:.72rem;color:var(--gilt-deep);font-weight:600" id="a-role"></div>
+        <h1 id="a-name"></h1>
+        <div class="badge-row" id="a-badges"></div>
+      </div>
+      <div class="artist-actions" id="a-actions"></div>
+    </div>
+    <div class="artist-stats" id="a-stats"></div>
+    <div id="a-requests"></div>
+    <div class="about-card">
+      <h3>შესახებ</h3>
+      <div class="bio-text" id="a-bio"></div>
+      <div id="a-bio-edit" style="display:none">
+        <textarea id="a-bio-input" maxlength="1000" placeholder="მოყევი შენი გზა — ტექნიკა, სერიები, გამოფენები, შთაგონება…"></textarea>
+        <button class="btn btn-ink btn-sm" style="margin-top:10px" onclick="saveBio()">შენახვა</button>
+      </div>
+    </div>
+    <div class="sec-head"><h2>აუქციონების არქივი</h2><span class="script">sold &amp; live</span></div>
+    <div class="grid" id="a-grid" style="margin-bottom:50px"></div>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="page" id="p-board">
+  <div class="wrap" style="max-width:760px">
+    <section>
+      <div class="sec-head"><h2>ლიდერბორდი</h2><span class="script">the hall of fame</span></div>
+      <div class="lb-tabs">
+        <button class="chip on" id="lbt-artists" onclick="lbTab('artists')">მხატვრები</button>
+        <button class="chip" id="lbt-collectors" onclick="lbTab('collectors')">კოლექციონერები</button>
+      </div>
+      <div id="lb-list"></div>
+    </section>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="page" id="p-chat">
+  <div class="wrap">
+    <div class="sec-head" style="padding-top:26px"><h2>ჩატი</h2><span class="script">between artist and collector</span></div>
+    <div class="chat-layout">
+      <div class="chat-list" id="chat-list"></div>
+      <div class="chat-main">
+        <div class="chat-head" id="chat-head">აირჩიე საუბარი</div>
+        <div class="chat-msgs" id="chat-msgs"><div class="chat-empty">აირჩიე საუბარი მარცხნივ, ან დაიწყე ახალი ლოტის გვერდიდან — „მიწერე ავტორს"</div></div>
+        <div class="chat-input" id="chat-input-row" style="display:none">
+          <input id="chat-input" placeholder="შეტყობინება…" onkeydown="if(event.key==='Enter')sendMsg()">
+          <button class="btn btn-ink" onclick="sendMsg()">გაგზავნა</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW / TERMS -->
+<div class="page" id="p-how">
+  <div class="doc">
+    <h1>როგორ მუშაობს</h1>
+    <span class="script">from studio wall to collector's wall</span>
+    <div class="steps" id="how-steps"></div>
+    <h2>წესები და პირობები (შემოკლებული)</h2>
+    <ul>
+      <li>ლოტის განთავსებით გამყიდველი ადასტურებს ავტორობას ან გაყიდვის უფლებამოსილებას. საავტორო უფლებები რჩება ავტორს.</li>
+      <li>ბიდი სავალდებულო შეთავაზებაა — გამარჯვების შემთხვევაში მყიდველი ვალდებულია შეიძინოს ნამუშევარი.</li>
+      <li>ანტი-სნაიპინგი: დასრულებამდე ბოლო 2 წუთში დადებული ბიდი აუქციონს 2 წუთით ახანგრძლივებს.</li>
+      <li>გამყიდველს ეკრძალება საკუთარ ლოტზე ბიდის დადება პირდაპირ ან შუამავლით.</li>
+      <li>დასრულების შემდეგ მხარეები ჩატში თანხმდებიან გადახდასა და მიწოდებაზე. რეკომენდებულია დოკუმენტირებული გადახდა.</li>
+      <li>განთავსება უფასოა; წარმატებულ გაყიდვაზე შესაძლოა გავრცელდეს პლატფორმის მომსახურების საკომისიო, რომლის ოდენობა ცალკე ქვეყნდება.</li>
+      <li>წესების დარღვევა (ყალბი ავტორობა, ფიქტიური ბიდები) იწვევს ანგარიშის დაბლოკვას.</li>
+    </ul>
+    <h2>კონფიდენციალურობა</h2>
+    <p>ვინახავთ მხოლოდ აუქციონისთვის საჭირო მონაცემებს: სახელი, ელფოსტა, ლოტები, ბიდები, კომენტარები, შეტყობინებები. მონაცემები არ იყიდება. ბიდერის სახელი საჯაროა — ეს გამჭვირვალობის ნაწილია. წაშლის მოთხოვნა: info@artgavel.ge</p>
+    <h2>ხშირად დასმული კითხვები</h2>
+    <div class="faq-item"><b>რატომ მჭირდება ანგარიში ბიდისთვის?</b><p>ბიდი სავალდებულო შეთავაზებაა — ანგარიში იცავს გამყიდველს ფიქტიური ბიდებისგან და მყიდველს აძლევს ისტორიას, რეიტინგს და ბეჯებს.</p></div>
+    <div class="faq-item"><b>როგორ ვიღებ ბეჯებს?</b><p>მხატვრები — დაგროვილი რეაქციებით და გაყიდვებით; კოლექციონერები — ბიდებითა და შესყიდვებით. ბეჯები შენს გვერდზე და ლიდერბორდზე ჩანს.</p></div>
+    <div class="faq-item"><b>რა ხდება აუქციონის დასრულებისას?</b><p>ბოლო ბიდერი იმარჯვებს. მას და ავტორს ერთმანეთთან ჩატი ეხსნებათ გადახდისა და მიწოდების შესათანხმებლად.</p></div>
+    <div class="small">ბოლო განახლება: ივლისი 2026 · info@artgavel.ge</div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="page" id="p-setup">
+  <div class="doc">
+    <h1>პლატფორმის რეჟიმი</h1>
+    <span class="script">one paste from going live</span>
+    <p id="setup-status" style="margin-bottom:18px"></p>
+    <h2>როგორ ჩავრთო ლაივ რეჟიმი (Firebase)</h2>
+    <ol>
+      <li>გახსენი <code>console.firebase.google.com</code> → <b>Add project</b> (სახელი: artgavel) → შექმენი.</li>
+      <li>Build → <b>Authentication</b> → Get started → Sign-in method → ჩართე <b>Email/Password</b>.</li>
+      <li>Build → <b>Firestore Database</b> → Create database → Start in <b>production mode</b> → ლოკაცია: eur3.</li>
+      <li>Firestore → Rules → ჩასვი ქვემოთ მოცემული წესები → Publish.</li>
+      <li>Project settings (⚙) → General → Your apps → <b>Web app (&lt;/&gt;)</b> → Register → დააკოპირე <code>firebaseConfig</code> ობიექტი.</li>
+      <li>ჩასვი ქვემოთ და დააჭირე „ჩართვა“.</li>
+    </ol>
+    <div class="field" style="margin-top:16px"><label>firebaseConfig (ჩასვი JSON ან JS ობიექტი)</label>
+      <textarea id="fb-config" style="min-height:120px;font-family:monospace;font-size:.75rem" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'></textarea>
+    </div>
+    <button class="btn btn-ink" onclick="saveConfig()">ჩართვა — გადავიდეთ ლაივზე</button>
+    <button class="btn btn-line" style="margin-left:8px" onclick="clearConfig()">დემო რეჟიმზე დაბრუნება</button>
+    <h2 style="margin-top:30px">Firestore Rules (დააკოპირე)</h2>
+    <pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read: if true;
+      allow create: if request.auth != null &amp;&amp; request.auth.uid == uid;
+      allow update: if request.auth != null;
+    }
+    match /lots/{lot} {
+      allow read: if true;
+      allow create: if request.auth != null
+        &amp;&amp; request.resource.data.ownerUid == request.auth.uid;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null
+        &amp;&amp; resource.data.ownerUid == request.auth.uid
+        &amp;&amp; resource.data.bidCount == 0;
+      match /{sub=**} {
+        allow read: if true;
+        allow write: if request.auth != null;
+      }
+    }
+    match /chats/{chat} {
+      allow read, write: if request.auth != null
+        &amp;&amp; request.auth.uid in resource.data.users;
+      allow create: if request.auth != null
+        &amp;&amp; request.auth.uid in request.resource.data.users;
+      match /messages/{msg} {
+        allow read, create: if request.auth != null;
+      }
+    }
+  }
+}</pre>
+  </div>
+</div>
+
+<footer>
+  <div class="logo" style="justify-content:center;display:flex"><span class="anton">ARTGAVEL</span><span class="script">Tbilisi</span></div>
+  <div class="flinks">
+    <a onclick="nav('how')">წესები</a>
+    <a onclick="nav('board')">ლიდერბორდი</a>
+    <a onclick="nav('sell')">გაყიდე ნამუშევარი</a>
+    <a onclick="nav('setup')">პარამეტრები</a>
+  </div>
+  <div>ქართული ხელოვნების აუქციონი · © 2026 ARTGAVEL</div>
+</footer>
+
+<div id="music-pill">
+  <button id="music-toggle" onclick="musicToggle()"></button>
+  <div class="mtitle"><span class="eq" id="eq" style="display:none"><i></i><i></i><i></i></span><i>now playing</i><span id="music-title"></span></div>
+  <button class="mnext" onclick="musicNext()" title="შემდეგი" id="music-next"></button>
+</div>
+<audio id="music-el"></audio>
+
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   ICONS — inline SVG, no emojis in informational UI
+================================================================ */
+const IC = {
+  gavel:'<path d="M13 5l6 6M11 7l6 6M8 10l6 6M3 21h10M14 4l-8 8 3 3 8-8z"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  shield:'<path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/>',
+  scale:'<path d="M12 3v18M5 7h14M5 7l-2.5 6a3.5 3.5 0 0 0 7 0L7 7M17 7l-2.5 6a3.5 3.5 0 0 0 7 0L19 7M8 21h8"/>',
+  image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 17l6-5 4 3 3-2 5 4"/>',
+  star:'<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9L12 16.4 6.7 19.3l1.2-5.9L3.4 9.3l6-.7z"/>',
+  starF:'<path fill="currentColor" stroke="none" d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9L12 16.4 6.7 19.3l1.2-5.9L3.4 9.3l6-.7z"/>',
+  chat:'<path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z"/>',
+  share:'<circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.2 10.8l6.6-3.6M8.2 13.2l6.6 3.6"/>',
+  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 5H4c0 3 1.5 5 4 5M16 5h4c0 3-1.5 5-4 5M12 13v4M8 21h8M9 17h6"/>',
+  medal:'<circle cx="12" cy="14" r="5"/><path d="M9 3l3 6 3-6M8.5 10L6 3M15.5 10L18 3"/>',
+  brush:'<path d="M14 3l7 7-8 8H6v-7zM6 21c2 0 3-1 3-3"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+  upload:'<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>',
+  camera:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13" r="3.5"/>',
+  fire:'<path d="M12 3c1 3-3 5-3 9a4.5 4.5 0 0 0 9 0c0-2-1-3-1.5-4-.5 1-1 1.5-2 1.5C15.5 7 14 5 12 3z"/>',
+  check:'<path d="M4 12l5 5L20 6"/>',
+  bell:'<path d="M18 16v-5a6 6 0 1 0-12 0v5l-2 3h16zM10 22h4"/>',
+  play:'<path fill="currentColor" stroke="none" d="M8 5.5v13l11-6.5z"/>',
+  pause:'<path fill="currentColor" stroke="none" d="M7 5h3.4v14H7zM13.6 5H17v14h-3.4z"/>',
+  next:'<path d="M6 6l7 6-7 6M16 6v12"/>',
+  lock:'<rect x="4.5" y="10" width="15" height="10" rx="2"/><path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10"/>'
+};
+const ic = (n,cls='') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n]||''}</svg>`;
+
+/* fill icon-driven static content */
+document.getElementById('trust-grid').innerHTML = [
+  ['scale','გამჭვირვალე ბიდები','ბიდების სრული ისტორია ღიაა — არავითარი ფარული შეთანხმება კომენტარებში.'],
+  ['clock','ანტი-სნაიპინგი','ბოლო 2 წუთის ბიდი აუქციონს 2 წუთით ახანგრძლივებს — სამართლიანი დასასრული.'],
+  ['medal','რანგები და ბეჯები','მხატვრები და კოლექციონერები აგროვებენ რეპუტაციას — ის ყველასთვის ჩანს.'],
+  ['chat','პირდაპირი ჩატი','ავტორსა და მყიდველს შორის — კითხვები, გადახდა, მიწოდება ერთ სივრცეში.']
+].map(([i,h,p])=>`<div class="trust-card">${ic(i,'ic-lg')}<h4>${h}</h4><p>${p}</p></div>`).join('');
+
+document.getElementById('how-steps').innerHTML = [
+  ['one','upload','ატვირთე','5 ფოტომდე, აღწერა, საწყისი ფასი, ბიდის ბიჯი და ხანგრძლივობა. განთავსება უფასოა.'],
+  ['two','gavel','აუქციონი','ბიდები ღიად ჩანს რეალურ დროში. ბოლო 2 წუთის ბიდი დროს ახანგრძლივებს.'],
+  ['three','chat','გარიგება','გამარჯვებული და მხატვარი ჩატში თანხმდებიან გადახდასა და მიწოდებაზე.']
+].map(([n,i,h,p])=>`<div class="stepc"><div class="n">${n}</div><h4>${ic(i)} ${h}</h4><p>${p}</p></div>`).join('');
+
+document.getElementById('lot-trust').innerHTML =
+  `<span>${ic('scale')} გამჭვირვალე ისტორია</span><span>${ic('clock')} ანტი-სნაიპინგი</span><span>${ic('shield')} რეგისტრირებული ბიდერები</span>`;
+document.getElementById('share-btn').innerHTML = ic('share');
+document.getElementById('msg-artist-btn').innerHTML = ic('chat')+' მიწერე ავტორს';
+document.getElementById('drop').insertAdjacentHTML('afterbegin', ic('camera','ic-lg'));
+
+/* ================================================================
+   DB ADAPTER — LocalDB (demo) & FireDB (live), same interface
+================================================================ */
+const RXKEYS = {heart:'❤️', fire:'🔥', wow:'😮', clap:'👏'};
+const $ = id => document.getElementById(id);
+const esc = s => String(s??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+const fmt = n => '₾'+(+n).toLocaleString('ka-GE');
+function toast(m){ const t=$('toast'); t.innerHTML=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3200); }
+
+/* Baked-in Firebase config — every visitor uses this automatically.
+   (A pasted config in the setup page overrides it for testing.) */
+const DEFAULT_CFG={
+  apiKey:"AIzaSyCG8o81Six_wfoi08DPJ4zQzGw9mEYkIz8",
+  authDomain:"artgavel-fe63d.firebaseapp.com",
+  projectId:"artgavel-fe63d",
+  storageBucket:"artgavel-fe63d.firebasestorage.app",
+  messagingSenderId:"78440910573",
+  appId:"1:78440910573:web:1da5eb672af8a7ff3f46e4"
+};
+function getCfg(){
+  try{ const c=JSON.parse(localStorage.getItem('agv-fbcfg')||'null'); if(c) return c; }catch(e){}
+  return DEFAULT_CFG;
+}
+
+/* ---------- LocalDB: single-device demo ---------- */
+const LocalDB = {
+  mode:'demo', data:null, lotCbs:[], lotOneCbs:{}, userCbs:[], chatCbs:[], msgCbs:{},
+  authCb:null, me:null,
+  async init(){
+    try{ this.data = JSON.parse(localStorage.getItem('agv-data')||'null'); }catch(e){}
+    this.data ||= {lots:[], users:{}, chats:[], msgs:{}, session:null};
+    this.me = this.data.session ? this.data.users[this.data.session] : null;
+    setTimeout(()=>{ this.authCb?.(this.me); this.emitLots(); this.emitUsers(); },0);
+  },
+  save(){ try{ localStorage.setItem('agv-data', JSON.stringify(this.data)); }
+    catch(e){ toast('შენახვა ვერ მოხერხდა — ფოტოების ჯამური ზომა დიდია'); } },
+  emitLots(){ const list=[...this.data.lots]; this.lotCbs.forEach(cb=>cb(list));
+    Object.entries(this.lotOneCbs).forEach(([id,cb])=>{ const l=this.data.lots.find(x=>x.id===id); if(l) cb(l); }); },
+  emitUsers(){ const u=Object.values(this.data.users); this.userCbs.forEach(cb=>cb(u)); },
+  emitChats(){ this.chatCbs.forEach(cb=>cb(this.data.chats.filter(c=>c.users.includes(this.me?.uid)))); },
+  emitMsgs(id){ this.msgCbs[id]?.(this.data.msgs[id]||[]); },
+  onAuth(cb){ this.authCb=cb; if(this.data) cb(this.me); },
+  async signUp(email,pass,name,role){
+    email=email.toLowerCase();
+    if(Object.values(this.data.users).some(u=>u.email===email)) throw new Error('ეს ელფოსტა უკვე რეგისტრირებულია');
+    const uid='u'+Date.now().toString(36);
+    const u={uid,email,pass,name,role,bio:'',createdAt:Date.now(),friends:[],reqIn:[],reqOut:[],stats:{sold:0,bought:0,reactions:0,bids:0,totalSales:0,ratingSum:0,ratingCount:0}};
+    this.data.users[uid]=u; this.data.session=uid; this.me=u; this.save();
+    this.authCb?.(u); this.emitUsers(); return u;
+  },
+  async signIn(email,pass){
+    email=email.toLowerCase();
+    const u=Object.values(this.data.users).find(x=>x.email===email&&x.pass===pass);
+    if(!u) throw new Error('ელფოსტა ან პაროლი არასწორია');
+    this.data.session=u.uid; this.me=u; this.save(); this.authCb?.(u); return u;
+  },
+  async signOut(){ this.data.session=null; this.me=null; this.save(); this.authCb?.(null); },
+  onLots(cb){ this.lotCbs.push(cb); if(this.data) cb([...this.data.lots]); },
+  onLot(id,cb){ this.lotOneCbs[id]=cb; const l=this.data.lots.find(x=>x.id===id); if(l) cb(l); },
+  offLot(id){ delete this.lotOneCbs[id]; },
+  async getPhotos(id){ return (this.data.lots.find(x=>x.id===id)?.photos)||[]; },
+  async createLot(meta,photos){
+    const l={...meta, id:'lot'+Date.now().toString(36), photos, cover:photos[0], photoCount:photos.length,
+      bids:[], comments:[], reactions:{heart:0,fire:0,wow:0,clap:0}, bidCount:0, topBidder:'', finalized:false};
+    this.data.lots.unshift(l); this.save(); this.emitLots(); return l.id;
+  },
+  async deleteLot(id){
+    const l=this.data.lots.find(x=>x.id===id);
+    if(l?.bidCount>0) throw new Error('ლოტი ბიდებით ვერ წაიშლება');
+    this.data.lots=this.data.lots.filter(x=>x.id!==id); this.save(); this.emitLots();
+  },
+  async placeBid(id){
+    const l=this.data.lots.find(x=>x.id===id); if(!l) throw new Error('ლოტი ვერ მოიძებნა');
+    if(Date.now()>=l.endsAt) throw new Error('აუქციონი დასრულებულია');
+    if(this.me.uid===l.ownerUid) throw new Error('საკუთარ ლოტზე ბიდი აკრძალულია');
+    if(l.topBidderUid===this.me.uid) throw new Error('შენ უკვე ლიდერი ხარ');
+    let ext=false;
+    if(l.endsAt-Date.now()<120e3){ l.endsAt+=120e3; ext=true; }
+    l.price+=l.step; l.bidCount++;
+    l.topBidder=this.me.name; l.topBidderUid=this.me.uid;
+    l.bids.unshift({who:this.me.name,uid:this.me.uid,amt:l.price,t:Date.now()});
+    this.me.stats.bids++; this.save(); this.emitLots(); this.emitUsers();
+    return {ext, price:l.price};
+  },
+  async addComment(id,text){
+    const l=this.data.lots.find(x=>x.id===id);
+    l.comments.push({who:this.me.name,uid:this.me.uid,text,t:Date.now()});
+    this.save(); this.emitLots();
+  },
+  async react(id,key){
+    const l=this.data.lots.find(x=>x.id===id);
+    l.reactions[key]=(l.reactions[key]||0)+1;
+    const owner=this.data.users[l.ownerUid]; if(owner) owner.stats.reactions++;
+    this.save(); this.emitLots(); this.emitUsers();
+  },
+  async finalize(id){
+    const l=this.data.lots.find(x=>x.id===id);
+    if(!l||l.finalized||Date.now()<l.endsAt) return;
+    l.finalized=true;
+    if(l.bidCount>0){
+      const seller=this.data.users[l.ownerUid], buyer=this.data.users[l.topBidderUid];
+      if(seller){ seller.stats.sold++; seller.stats.totalSales+=l.price; }
+      if(buyer){ buyer.stats.bought++; }
+    }
+    this.save(); this.emitUsers();
+  },
+  onUsers(cb){ this.userCbs.push(cb); if(this.data) cb(Object.values(this.data.users)); },
+  async updateProfile(patch){ Object.assign(this.me,patch); this.save(); this.emitUsers(); },
+  async updateDeal(id,status){
+    const l=this.data.lots.find(x=>x.id===id);
+    l.deal={...(l.deal||{}),status}; this.save(); this.emitLots();
+  },
+  async submitReview(id,stars,text){
+    const l=this.data.lots.find(x=>x.id===id);
+    l.deal={...(l.deal||{}),review:{stars,text,by:this.me.name,t:Date.now()}};
+    const seller=this.data.users[l.ownerUid];
+    if(seller){ seller.stats.ratingSum=(seller.stats.ratingSum||0)+stars; seller.stats.ratingCount=(seller.stats.ratingCount||0)+1; }
+    this.save(); this.emitLots(); this.emitUsers();
+  },
+  async sendFriendReq(uid){
+    const other=this.data.users[uid]; if(!other) return;
+    if(!this.me.reqOut.includes(uid)) this.me.reqOut.push(uid);
+    other.reqIn ||= []; if(!other.reqIn.includes(this.me.uid)) other.reqIn.push(this.me.uid);
+    this.save(); this.emitUsers();
+  },
+  async acceptFriend(uid){
+    const other=this.data.users[uid]; if(!other) return;
+    this.me.friends ||= []; other.friends ||= [];
+    if(!this.me.friends.includes(uid)) this.me.friends.push(uid);
+    if(!other.friends.includes(this.me.uid)) other.friends.push(this.me.uid);
+    this.me.reqIn=(this.me.reqIn||[]).filter(x=>x!==uid);
+    other.reqOut=(other.reqOut||[]).filter(x=>x!==this.me.uid);
+    this.save(); this.emitUsers();
+  },
+  async declineFriend(uid){
+    const other=this.data.users[uid];
+    this.me.reqIn=(this.me.reqIn||[]).filter(x=>x!==uid);
+    if(other) other.reqOut=(other.reqOut||[]).filter(x=>x!==this.me.uid);
+    this.save(); this.emitUsers();
+  },
+  async startChat(otherUid,otherName){
+    let c=this.data.chats.find(x=>x.users.includes(this.me.uid)&&x.users.includes(otherUid));
+    if(!c){ c={id:'c'+Date.now().toString(36),users:[this.me.uid,otherUid],
+      names:{[this.me.uid]:this.me.name,[otherUid]:otherName},last:'',updatedAt:Date.now()};
+      this.data.chats.push(c); this.data.msgs[c.id]=[]; this.save(); }
+    this.emitChats(); return c.id;
+  },
+  onChats(cb){ this.chatCbs=[cb]; this.emitChats(); },
+  onMsgs(id,cb){ this.msgCbs[id]=cb; this.emitMsgs(id); },
+  offMsgs(id){ delete this.msgCbs[id]; },
+  async sendMsg(chatId,text){
+    (this.data.msgs[chatId] ||= []).push({from:this.me.uid,text,t:Date.now()});
+    const c=this.data.chats.find(x=>x.id===chatId); c.last=text; c.updatedAt=Date.now(); c.lastFrom=this.me.uid;
+    this.save(); this.emitMsgs(chatId); this.emitChats();
+  }
+};
+
+/* ---------- FireDB: real-time multi-user ---------- */
+const FireDB = {
+  mode:'live', me:null, fs:null, auth:null, unsubs:{},
+  async init(cfg){
+    firebase.initializeApp(cfg);
+    this.auth=firebase.auth(); this.fs=firebase.firestore();
+    this.auth.onAuthStateChanged(async u=>{
+      if(u){
+        const d=await this.fs.doc('users/'+u.uid).get();
+        this.me = d.exists ? {uid:u.uid,...d.data()} : {uid:u.uid,name:u.displayName||'User',role:'collector',stats:{sold:0,bought:0,reactions:0,bids:0,totalSales:0}};
+      } else this.me=null;
+      this.authCb?.(this.me);
+    });
+  },
+  onAuth(cb){ this.authCb=cb; },
+  async signUp(email,pass,name,role){
+    const cred=await this.auth.createUserWithEmailAndPassword(email,pass);
+    await cred.user.updateProfile({displayName:name});
+    const u={name,role,email,bio:'',createdAt:Date.now(),friends:[],reqIn:[],reqOut:[],stats:{sold:0,bought:0,reactions:0,bids:0,totalSales:0,ratingSum:0,ratingCount:0}};
+    await this.fs.doc('users/'+cred.user.uid).set(u);
+    this.me={uid:cred.user.uid,...u}; this.authCb?.(this.me); return this.me;
+  },
+  async signIn(email,pass){ await this.auth.signInWithEmailAndPassword(email,pass); },
+  async signOut(){ await this.auth.signOut(); },
+  onLots(cb){
+    this.fs.collection('lots').orderBy('createdAt','desc').limit(200)
+      .onSnapshot(s=>cb(s.docs.map(d=>({id:d.id,...d.data()}))), e=>toast('კავშირის შეცდომა: '+e.code));
+  },
+  onLot(id,cb){
+    this.unsubs['lot']?.();
+    const un1=this.fs.doc('lots/'+id).onSnapshot(d=>{ if(!d.exists) return; this._lot={id:d.id,...d.data(),bids:this._bids||[],comments:this._cmts||[]}; cb(this._lot); });
+    const un2=this.fs.collection('lots/'+id+'/bids').orderBy('t','desc').limit(50)
+      .onSnapshot(s=>{ this._bids=s.docs.map(d=>d.data()); if(this._lot){ this._lot.bids=this._bids; cb(this._lot);} });
+    const un3=this.fs.collection('lots/'+id+'/comments').orderBy('t','asc').limit(200)
+      .onSnapshot(s=>{ this._cmts=s.docs.map(d=>d.data()); if(this._lot){ this._lot.comments=this._cmts; cb(this._lot);} });
+    this.unsubs['lot']=()=>{un1();un2();un3(); this._lot=this._bids=this._cmts=null;};
+  },
+  offLot(){ this.unsubs['lot']?.(); delete this.unsubs['lot']; },
+  async getPhotos(id){
+    const s=await this.fs.collection('lots/'+id+'/photos').orderBy('i').get();
+    return s.docs.map(d=>d.data().data);
+  },
+  async createLot(meta,photos){
+    const ref=await this.fs.collection('lots').add({...meta, cover:photos[0], photoCount:photos.length,
+      reactions:{heart:0,fire:0,wow:0,clap:0}, bidCount:0, topBidder:'', topBidderUid:'', finalized:false});
+    const b=this.fs.batch();
+    photos.forEach((p,i)=>b.set(this.fs.doc('lots/'+ref.id+'/photos/p'+i),{i,data:p}));
+    await b.commit(); return ref.id;
+  },
+  async deleteLot(id){ await this.fs.doc('lots/'+id).delete(); },
+  async placeBid(id){
+    const me=this.me, lotRef=this.fs.doc('lots/'+id);
+    return this.fs.runTransaction(async tx=>{
+      const d=await tx.get(lotRef); const l=d.data();
+      if(Date.now()>=l.endsAt) throw new Error('აუქციონი დასრულებულია');
+      if(me.uid===l.ownerUid) throw new Error('საკუთარ ლოტზე ბიდი აკრძალულია');
+      if(l.topBidderUid===me.uid) throw new Error('შენ უკვე ლიდერი ხარ');
+      let ext=false, endsAt=l.endsAt;
+      if(endsAt-Date.now()<120e3){ endsAt+=120e3; ext=true; }
+      const price=l.price+l.step;
+      tx.update(lotRef,{price,endsAt,bidCount:l.bidCount+1,topBidder:me.name,topBidderUid:me.uid});
+      tx.set(this.fs.collection('lots/'+id+'/bids').doc(),{who:me.name,uid:me.uid,amt:price,t:Date.now()});
+      tx.update(this.fs.doc('users/'+me.uid),{'stats.bids':firebase.firestore.FieldValue.increment(1)});
+      return {ext,price};
+    });
+  },
+  async addComment(id,text){
+    await this.fs.collection('lots/'+id+'/comments').add({who:this.me.name,uid:this.me.uid,text,t:Date.now()});
+  },
+  async react(id,key){
+    const d=await this.fs.doc('lots/'+id).get(); const owner=d.data()?.ownerUid;
+    await this.fs.doc('lots/'+id).update({['reactions.'+key]:firebase.firestore.FieldValue.increment(1)});
+    if(owner) this.fs.doc('users/'+owner).update({'stats.reactions':firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
+  },
+  async finalize(id){
+    const ref=this.fs.doc('lots/'+id);
+    await this.fs.runTransaction(async tx=>{
+      const d=await tx.get(ref); const l=d.data();
+      if(!l||l.finalized||Date.now()<l.endsAt) return;
+      tx.update(ref,{finalized:true});
+      if(l.bidCount>0){
+        tx.update(this.fs.doc('users/'+l.ownerUid),{'stats.sold':firebase.firestore.FieldValue.increment(1),'stats.totalSales':firebase.firestore.FieldValue.increment(l.price)});
+        tx.update(this.fs.doc('users/'+l.topBidderUid),{'stats.bought':firebase.firestore.FieldValue.increment(1)});
+      }
+    }).catch(()=>{});
+  },
+  onUsers(cb){
+    this.fs.collection('users').limit(500).onSnapshot(s=>cb(s.docs.map(d=>({uid:d.id,...d.data()}))));
+  },
+  async updateProfile(patch){
+    Object.assign(this.me,patch);
+    await this.fs.doc('users/'+this.me.uid).update(patch);
+  },
+  async updateDeal(id,status){
+    await this.fs.doc('lots/'+id).update({'deal.status':status});
+  },
+  async submitReview(id,stars,text){
+    const d=await this.fs.doc('lots/'+id).get(); const owner=d.data()?.ownerUid;
+    await this.fs.doc('lots/'+id).update({'deal.review':{stars,text,by:this.me.name,t:Date.now()}});
+    if(owner) await this.fs.doc('users/'+owner).update({
+      'stats.ratingSum':firebase.firestore.FieldValue.increment(stars),
+      'stats.ratingCount':firebase.firestore.FieldValue.increment(1)});
+  },
+  async sendFriendReq(uid){
+    const FV=firebase.firestore.FieldValue;
+    await this.fs.doc('users/'+this.me.uid).update({reqOut:FV.arrayUnion(uid)});
+    await this.fs.doc('users/'+uid).update({reqIn:FV.arrayUnion(this.me.uid)});
+  },
+  async acceptFriend(uid){
+    const FV=firebase.firestore.FieldValue;
+    await this.fs.doc('users/'+this.me.uid).update({friends:FV.arrayUnion(uid),reqIn:FV.arrayRemove(uid)});
+    await this.fs.doc('users/'+uid).update({friends:FV.arrayUnion(this.me.uid),reqOut:FV.arrayRemove(this.me.uid)});
+  },
+  async declineFriend(uid){
+    const FV=firebase.firestore.FieldValue;
+    await this.fs.doc('users/'+this.me.uid).update({reqIn:FV.arrayRemove(uid)});
+    await this.fs.doc('users/'+uid).update({reqOut:FV.arrayRemove(this.me.uid)});
+  },
+  async startChat(otherUid,otherName){
+    const q=await this.fs.collection('chats').where('users','array-contains',this.me.uid).get();
+    let found=q.docs.find(d=>d.data().users.includes(otherUid));
+    if(found) return found.id;
+    const ref=await this.fs.collection('chats').add({users:[this.me.uid,otherUid],
+      names:{[this.me.uid]:this.me.name,[otherUid]:otherName},last:'',updatedAt:Date.now()});
+    return ref.id;
+  },
+  onChats(cb){
+    if(!this.me) return cb([]);
+    this.unsubs['chats']?.();
+    this.unsubs['chats']=this.fs.collection('chats').where('users','array-contains',this.me.uid)
+      .onSnapshot(s=>cb(s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.updatedAt-a.updatedAt)));
+  },
+  onMsgs(id,cb){
+    this.unsubs['msgs']?.();
+    this.unsubs['msgs']=this.fs.collection('chats/'+id+'/messages').orderBy('t','asc').limit(300)
+      .onSnapshot(s=>cb(s.docs.map(d=>d.data())));
+  },
+  offMsgs(){ this.unsubs['msgs']?.(); delete this.unsubs['msgs']; },
+  async sendMsg(chatId,text){
+    await this.fs.collection('chats/'+chatId+'/messages').add({from:this.me.uid,text,t:Date.now()});
+    await this.fs.doc('chats/'+chatId).update({last:text,updatedAt:Date.now(),lastFrom:this.me.uid});
+  }
+};
+
+const cfg=getCfg();
+const DB = cfg ? FireDB : LocalDB;
+
+/* ================================================================
+   APP STATE
+================================================================ */
+let LOTS=[], USERS=[], ME=null, WATCH=[];
+let currentLotId=null, currentLotData=null, currentPhotos=[], shownPhoto=0, filter='live';
+try{ WATCH=JSON.parse(localStorage.getItem('agv-watch')||'[]'); }catch(e){}
+function saveWatch(){ try{ localStorage.setItem('agv-watch',JSON.stringify(WATCH)); }catch(e){} }
+
+function isLive(l){ return Date.now()<l.endsAt; }
+function timeLeft(l){ let t=Math.max(0,Math.floor((l.endsAt-Date.now())/1000));
+  return [Math.floor(t/86400),Math.floor(t%86400/3600),Math.floor(t%3600/60),t%60]; }
+
+/* ================================================================
+   BADGES & RANKS
+================================================================ */
+function artistBadges(st){
+  const b=[];
+  if(st.totalSales>=5000) b.push(['gold','trophy','ოქროს ოსტატი']);
+  else if(st.totalSales>=1000) b.push(['gold','medal','აღიარებული']);
+  else if(st.sold>=1) b.push(['','medal','პირველი გაყიდვა']);
+  if(st.reactions>=500) b.push(['ox','fire','საყვარელი ავტორი']);
+  else if(st.reactions>=100) b.push(['ox','fire','პოპულარული']);
+  else if(st.reactions>=25) b.push(['','star','ამომავალი']);
+  return b;
+}
+function collectorBadges(st){
+  const b=[];
+  if(st.bought>=10) b.push(['gold','trophy','დიდი კოლექციონერი']);
+  else if(st.bought>=3) b.push(['gold','medal','კოლექციონერი']);
+  else if(st.bought>=1) b.push(['','medal','პირველი შენაძენი']);
+  if(st.bids>=100) b.push(['ox','gavel','აუქციონის ვეტერანი']);
+  else if(st.bids>=20) b.push(['','gavel','აქტიური ბიდერი']);
+  return b;
+}
+function badgeHtml(list){ return list.map(([cls,i,t])=>`<span class="a-badge ${cls}">${ic(i)} ${t}</span>`).join(''); }
+
+/* ================================================================
+   AUTH UI
+================================================================ */
+let authMode='in', regRole='collector';
+function openAuth(mode='in'){ authTab(mode); $('auth-err').textContent=''; $('auth-back').classList.add('open'); }
+function closeAuth(){ $('auth-back').classList.remove('open'); }
+function authTab(m){ authMode=m;
+  $('tab-in').classList.toggle('on',m==='in'); $('tab-up').classList.toggle('on',m==='up');
+  $('auth-up-extra').style.display=m==='up'?'':'none';
+  $('auth-go').textContent=m==='up'?'რეგისტრაცია':'შესვლა';
+}
+function setRole(r){ regRole=r;
+  $('role-collector').classList.toggle('on',r==='collector');
+  $('role-artist').classList.toggle('on',r==='artist');
+}
+async function doAuth(){
+  const email=$('au-email').value.trim(), pass=$('au-pass').value;
+  $('auth-err').textContent='';
+  try{
+    if(authMode==='up'){
+      const name=$('au-name').value.trim();
+      if(!name) throw new Error('შეიყვანე სახელი');
+      if(pass.length<6) throw new Error('პაროლი მინ. 6 სიმბოლო');
+      await DB.signUp(email,pass,name,regRole);
+      toast('კეთილი იყოს შენი მობრძანება, '+name);
+    } else {
+      await DB.signIn(email,pass);
+      toast('შესვლა წარმატებულია');
+    }
+    closeAuth();
+  }catch(e){
+    const m={'auth/email-already-in-use':'ეს ელფოსტა უკვე რეგისტრირებულია','auth/invalid-email':'ელფოსტა არასწორია','auth/weak-password':'პაროლი სუსტია (მინ. 6)','auth/invalid-credential':'ელფოსტა ან პაროლი არასწორია','auth/user-not-found':'მომხმარებელი ვერ მოიძებნა','auth/wrong-password':'პაროლი არასწორია'};
+    $('auth-err').textContent = m[e.code] || e.message || 'შეცდომა';
+  }
+}
+function initials(name){
+  const p=(name||'').trim().split(/\s+/).filter(Boolean);
+  if(!p.length) return '?';
+  return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
+}
+function toggleAcct(e){
+  e?.stopPropagation();
+  $('acct-menu').classList.toggle('open');
+  $('notif-panel').classList.remove('open');
+}
+document.addEventListener('click',e=>{
+  const m=$('acct-menu');
+  if(m.classList.contains('open')&&!m.contains(e.target)&&e.target.id!=='acct-btn') m.classList.remove('open');
+});
+function acctGo(what){
+  $('acct-menu').classList.remove('open');
+  if(what==='profile') openArtist(ME.uid);
+  else if(what==='chat') nav('chat');
+  else if(what==='sell') nav('sell');
+  else if(what==='out'){ if(confirm('გასვლა ანგარიშიდან?')) DB.signOut(); }
+}
+function renderAcct(){
+  const on=!!ME;
+  $('acct-btn').classList.toggle('show',on);
+  $('auth-btn').style.display=on?'none':'';
+  if(!on){ $('acct-menu').classList.remove('open'); return; }
+  $('acct-btn').textContent=initials(ME.name);
+  const myAv=ME.avatar||avatarOf(ME.uid);
+  if(myAv){ $('acct-btn').style.backgroundImage=`url(${myAv})`; $('acct-btn').textContent=''; }
+  else $('acct-btn').style.backgroundImage='';
+  $('acct-name').textContent=ME.name;
+  $('acct-role').textContent=ME.role==='artist'?'მხატვარი':'კოლექციონერი';
+  $('acct-profile-btn').innerHTML=ic('user')+' ჩემი გვერდი';
+  $('acct-chat-btn').innerHTML=ic('chat')+' ჩატი';
+  $('acct-sell-btn').innerHTML=ic('upload')+' ატვირთე ლოტი';
+  $('acct-sell-btn').style.display=ME.role==='artist'?'':'none';
+  $('acct-out-btn').innerHTML=ic('lock')+' გასვლა';
+}
+function requireAuth(msg){
+  if(ME) return true;
+  toast(msg||'ამისთვის ანგარიშია საჭირო'); openAuth('up'); return false;
+}
+
+/* ================================================================
+   ROUTER
+================================================================ */
+function nav(p,push=true){
+  if(p==='setup'&&!IS_ADMIN){ toast('ეს გვერდი მხოლოდ ადმინისტრატორისთვისაა'); p='home'; }
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  ($('p-'+p)||$('p-home')).classList.add('on');
+  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===p));
+  if(push) location.hash = p==='home'?'':p==='lot'?'lot='+currentLotId:p;
+  window.scrollTo({top:0});
+  if(p==='sell') renderSellGate();
+  if(p==='board') renderBoard();
+  if(p==='chat') renderChatPage();
+  if(p==='setup') renderSetup();
+  if(p!=='lot'){ DB.offLot?.(currentLotId); }
+}
+function mClose(){ $('m-menu').classList.remove('open'); }
+function route(){
+  const qp=new URLSearchParams(location.search);
+  if(qp.get('lot')){ openLot(qp.get('lot'),false); return; }
+  if(qp.get('user')){ openArtist(qp.get('user'),false); return; }
+  const h=location.hash.slice(1);
+  if(h.startsWith('lot=')){ openLot(h.slice(4),false); return; }
+  if(h.startsWith('user=')){ openArtist(h.slice(5),false); return; }
+  if(['sell','how','board','chat','setup'].includes(h)){ nav(h,false); return; }
+  nav('home',false);
+}
+window.addEventListener('hashchange',route);
+
+/* ================================================================
+   HOME GRID
+================================================================ */
+function setFilter(f){ filter=f; document.querySelectorAll('.chip[data-f]').forEach(c=>c.classList.toggle('on',c.dataset.f===f)); renderGrid(); }
+function renderGrid(){
+  const q=($('search').value||'').toLowerCase();
+  let lots=LOTS.filter(l=>{
+    if(filter==='live'&&!isLive(l)) return false;
+    if(filter==='ended'&&isLive(l)) return false;
+    if(filter==='watch'&&!WATCH.includes(l.id)) return false;
+    if(q&&!(l.title+' '+l.artist).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const s=$('sort').value;
+  lots.sort((a,b)=>{
+    if(s==='ending') return (isLive(b)-isLive(a))||a.endsAt-b.endsAt;
+    if(s==='new') return b.createdAt-a.createdAt;
+    if(s==='price-hi') return b.price-a.price;
+    if(s==='price-lo') return a.price-b.price;
+    if(s==='hot') return b.bidCount-a.bidCount;
+  });
+  const g=$('lot-grid');
+  if(!lots.length){
+    g.innerHTML=`<div class="empty">${filter==='watch'?'ჩემს სიაში ჯერ არაფერია':'ლოტები ვერ მოიძებნა — <b style="color:var(--gilt-deep);cursor:pointer" onclick="nav(\'sell\')">ატვირთე პირველი</b>'}</div>`;
+    return;
+  }
+  g.innerHTML=lots.map(l=>{
+    const live=isLive(l),[D,H,M]=timeLeft(l);
+    const t=live?(D?`${D}დ ${H}ს`:`${H}ს ${M}წთ`):'';
+    const sold=!live&&l.bidCount>0;
+    const w=WATCH.includes(l.id);
+    const rxSum=Object.values(l.reactions||{}).reduce((a,b)=>a+b,0);
+    return `<div class="card" onclick="openLot('${l.id}')">
+      <div class="card-img" style="background-image:url(${l.cover})">
+        <span class="badge ${live?'':(sold?'sold':'ended')}">${live?'LIVE · '+t:(sold?'გაიყიდა · '+fmt(l.price):'დასრულდა')}</span>
+        <button class="watch-star ${w?'on':''}" onclick="event.stopPropagation();quickWatch('${l.id}')">${ic(w?'starF':'star')}</button>
+        ${l.photoCount>1?`<span class="photo-count">${ic('camera')} ${l.photoCount}</span>`:''}
+      </div>
+      <div class="card-body">
+        <h3>${esc(l.title)}</h3><div class="by"><i>by</i> ${esc(l.artist)}</div>
+        <div class="card-price"><b>${fmt(l.price)}</b><span>${l.bidCount?'▲ '+l.bidCount+' ბიდი':'საწყისი'}</span></div>
+        <div class="card-foot"><span>${esc(l.size||'')}${l.medium&&l.medium!=='—'?' · '+esc(l.medium):''}</span><span>${rxSum} რეაქცია</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function quickWatch(id){ const i=WATCH.indexOf(id); i<0?WATCH.push(id):WATCH.splice(i,1); saveWatch(); renderGrid(); }
+function renderStats(){
+  $('stat-lots').textContent=LOTS.length;
+  $('stat-bids').textContent=LOTS.reduce((s,l)=>s+(l.bidCount||0),0);
+  const artistCount=new Set([
+    ...USERS.filter(u=>u.role==='artist').map(u=>u.uid),
+    ...LOTS.map(l=>l.ownerUid)
+  ]).size;
+  $('stat-artists').textContent=artistCount;
+}
+
+/* ================================================================
+   LOT PAGE
+================================================================ */
+async function openLot(id,push=true){
+  DB.offLot?.(currentLotId);
+  currentLotId=id; shownPhoto=0; currentPhotos=[];
+  nav('lot',push);
+  DB.onLot(id, l=>{ currentLotData=l; renderLot(); });
+  currentPhotos=await DB.getPhotos(id);
+  renderPhotos();
+}
+function renderLot(){
+  const l=currentLotData; if(!l) return;
+  $('crumb-title').textContent=l.title;
+  $('lot-title').textContent=l.title;
+  $('lot-artist').textContent=l.artist;
+  $('lot-meta').textContent=[l.medium,l.size,l.loc].filter(x=>x&&x!=='—').join(' · ');
+  $('lot-desc').textContent=l.desc||'';
+  $('owner-tools').style.display=(ME&&ME.uid===l.ownerUid)?'':'none';
+  $('msg-artist-btn').style.display=(ME&&ME.uid===l.ownerUid)?'none':'';
+  if(!currentPhotos.length&&l.cover){ $('main-img').style.backgroundImage=`url(${l.cover})`; }
+  renderRx(); renderFeed(); renderComments(); renderDeal(); tick();
+  if(!isLive(l)&&!l.finalized) DB.finalize(l.id);
+}
+/* ---- Path A deal flow ---- */
+let pickedStars=5;
+function renderDeal(){
+  const l=currentLotData, box=$('deal-box');
+  const ended=!isLive(l), won=l.bidCount>0;
+  const isWinner=ME&&ME.uid===l.topBidderUid, isSeller=ME&&ME.uid===l.ownerUid;
+  if(!ended||!won||(!isWinner&&!isSeller)){ box.style.display='none'; return; }
+  box.style.display='';
+  const st=l.deal?.status||'awaiting';
+  const order=['awaiting','paid','shipped','delivered'];
+  const labels={awaiting:'ველოდებით გადახდას',paid:'გადახდილია',shipped:'გზაშია',delivered:'მიღებულია'};
+  const idx=order.indexOf(st);
+  let html=`<h3>${ic('gavel')} გარიგება — ${isWinner?'შენ მოიგე ეს ლოტი':'შენი ლოტი გაიყიდა'}</h3>
+    <div class="deal-steps">${order.map((s,i)=>`<div class="dstep ${i<=idx?'done':''}">${labels[s]}</div>`).join('')}</div>`;
+  if(isWinner&&l.pay) html+=`<div class="pay-reveal">${ic('shield')} <b>გადახდის დეტალები (ხილულია მხოლოდ შენთვის):</b>\n${esc(l.pay)}</div>`;
+  if(isWinner&&st==='awaiting') html+=`<button class="btn btn-ink btn-sm" onclick="dealStep('paid')">გადავიხადე</button>`;
+  if(isSeller&&st==='paid') html+=`<button class="btn btn-ink btn-sm" onclick="dealStep('shipped')">გავაგზავნე ნამუშევარი</button>`;
+  if(isWinner&&st==='shipped') html+=`<button class="btn btn-ink btn-sm" onclick="dealStep('delivered')">მივიღე ნამუშევარი</button>`;
+  if(st==='delivered'&&!l.deal?.review){
+    if(isWinner) html+=`<div style="margin-top:10px;font-size:.84rem"><b>შეაფასე მხატვარი:</b>
+      <div class="stars-pick" id="stars-pick">${[1,2,3,4,5].map(n=>`<span onclick="pickStars(${n})" data-s="${n}">${ic(n<=pickedStars?'starF':'star')}</span>`).join('')}</div>
+      <div class="c-input" style="margin-top:6px"><input id="review-text" maxlength="300" placeholder="რამდენიმე სიტყვა…"><button class="btn btn-ink" onclick="sendReview()">შეფასება</button></div></div>`;
+    else html+=`<div style="font-size:.82rem;color:var(--ink-soft);margin-top:6px">ველოდებით მყიდველის შეფასებას</div>`;
+  }
+  if(l.deal?.review){
+    const r=l.deal.review;
+    html+=`<div class="review-show" style="margin-top:10px">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)} — ${esc(r.text||'')}<br><span style="font-size:.72rem;color:var(--ink-soft)">— ${esc(r.by)}</span></div>`;
+  }
+  box.innerHTML=html;
+}
+function pickStars(n){ pickedStars=n; renderDeal(); }
+async function dealStep(s){ try{ await DB.updateDeal(currentLotId,s); toast('სტატუსი განახლდა'); }catch(e){ toast('ვერ განახლდა'); } }
+async function sendReview(){
+  const text=($('review-text')?.value||'').trim();
+  try{ await DB.submitReview(currentLotId,pickedStars,text); toast('მადლობა შეფასებისთვის'); }catch(e){ toast('ვერ გაიგზავნა'); }
+}
+function renderPhotos(){
+  if(!currentPhotos.length) return;
+  $('main-img').style.backgroundImage=`url(${currentPhotos[shownPhoto]||currentPhotos[0]})`;
+  $('thumbs').innerHTML=currentPhotos.length>1
+    ?currentPhotos.map((p,i)=>`<div class="thumb ${i===shownPhoto?'on':''}" style="background-image:url(${p})" onclick="shownPhoto=${i};renderPhotos()"></div>`).join('')
+    :'';
+}
+function renderRx(){
+  const l=currentLotData;
+  $('rx-row').innerHTML=Object.entries(RXKEYS).map(([k,e])=>
+    `<button class="rx" onclick="react('${k}')">${e} <span>${l.reactions?.[k]||0}</span></button>`).join('');
+}
+async function react(k){
+  if(!requireAuth('რეაქციისთვის ანგარიშია საჭირო')) return;
+  try{ await DB.react(currentLotId,k); }catch(e){}
+  const f=document.createElement('div'); f.className='floater'; f.textContent=RXKEYS[k];
+  f.style.right=(20+Math.random()*70)+'px'; $('main-img').appendChild(f);
+  setTimeout(()=>f.remove(),2200);
+}
+function renderFeed(){
+  const l=currentLotData;
+  $('feed').innerHTML=(l.bids&&l.bids.length)
+    ?l.bids.map((b,i)=>`<div class="bid-row ${i===0?'top':''}"><span class="who">${esc(b.who)}${i===0?' — ლიდერი':''}</span><span class="amt">${fmt(b.amt)}</span></div>`).join('')
+    :'<div class="bid-row"><span class="who">ჯერ ბიდები არაა — იყავი პირველი</span></div>';
+}
+function renderComments(){
+  const l=currentLotData;
+  $('comment-list').innerHTML=(l.comments||[]).map(c=>{
+    const mins=Math.round((Date.now()-c.t)/60000);
+    const t=mins<60?mins+'წთ':mins<1440?Math.round(mins/60)+'სთ':Math.round(mins/1440)+'დღე';
+    const cav=avatarOf(c.uid);
+    return `<div class="comment"><div class="c-av" style="${cav?`background-image:url(${cav})`:''}">${cav?'':esc((c.who||'?')[0])}</div>
+      <div><b onclick="openArtist('${c.uid}')">${esc(c.who)}${c.uid===l.ownerUid?' <span style="color:var(--gilt-deep)">· ავტორი</span>':''}</b><span class="time">${t}</span><p>${esc(c.text)}</p></div></div>`;
+  }).join('')||'<div style="color:var(--ink-soft);font-size:.85rem;padding:6px 0">კომენტარები ჯერ არაა.</div>';
+}
+async function addComment(){
+  const inp=$('comment-input'); if(!inp.value.trim()) return;
+  if(!requireAuth('კომენტარისთვის ანგარიშია საჭირო')) return;
+  const text=inp.value.trim().slice(0,500); inp.value='';
+  try{ await DB.addComment(currentLotId,text); }catch(e){ toast('ვერ გაიგზავნა'); }
+}
+function toggleWatch(){ quickWatch(currentLotId); tick();
+  toast(WATCH.includes(currentLotId)?'დაემატა ჩემს სიაში':'ამოღებულია სიიდან'); }
+function shareUrl(){ return location.origin+location.pathname+'?lot='+currentLotId; }
+function shareLot(){
+  const url=shareUrl();
+  if(navigator.share){ navigator.share({title:currentLotData?.title,url}).catch(()=>{}); }
+  else{ navigator.clipboard?.writeText(url); toast('ბმული დაკოპირდა'); }
+}
+function shareFB(){
+  const l=currentLotData;
+  const ends=new Date(l.endsAt).toLocaleString('ka-GE',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
+  const caption=`🎨 ${l.title}\nავტორი: ${l.artist}\n${[l.medium,l.size].filter(x=>x&&x!=='—').join(' · ')}\n\nმიმდინარე ფასი: ${fmt(l.price)} · ბიდი +${fmt(l.step)}\nაუქციონი სრულდება: ${ends}\n\nბიდის დადება და ბიდების სრული ისტორია:\n${shareUrl()}`;
+  navigator.clipboard?.writeText(caption).then(()=>{
+    toast('კაფშენი დაკოპირდა — ატვირთე ფოტო Facebook-ზე და ჩასვი ტექსტი');
+  }).catch(()=>{});
+  setTimeout(()=>{
+    window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl()),
+      '_blank','noopener,width=600,height=480');
+  },400);
+}
+async function deleteLot(){
+  const l=currentLotData;
+  if(l.bidCount>0){ toast('ლოტი ბიდებით ვერ წაიშლება — ეს ბიდერების დაცვაა'); return; }
+  if(!confirm('ნამდვილად წავშალო ლოტი?')) return;
+  try{ await DB.deleteLot(l.id); nav('home'); toast('ლოტი წაიშალა'); }catch(e){ toast(e.message); }
+}
+async function placeBid(){
+  if(!requireAuth('ბიდისთვის რეგისტრაციაა საჭირო — ბიდი სავალდებულო შეთავაზებაა')) return;
+  try{
+    const r=await DB.placeBid(currentLotId);
+    $('notice').textContent=r.ext?'ბოლო 2 წუთი — აუქციონი 2 წუთით გახანგრძლივდა':'შენ ხარ ლიდერი';
+    react('fire');
+  }catch(e){ toast(e.message||'ბიდი ვერ დაიდო'); }
+}
+function tick(){
+  const l=currentLotData;
+  if(!l||!$('p-lot').classList.contains('on')) return;
+  const live=isLive(l),[D,H,M,S]=timeLeft(l);
+  $('cd-d').textContent=D;
+  $('cd-h').textContent=String(H).padStart(2,'0');
+  $('cd-m').textContent=String(M).padStart(2,'0');
+  $('cd-s').textContent=String(S).padStart(2,'0');
+  $('price').textContent=fmt(l.price);
+  $('step-info').innerHTML=`ბიდი: +${fmt(l.step)}<br>${l.bidCount||0} ბიდი`;
+  $('lot-ends').textContent=live
+    ?'სრულდება '+new Date(l.endsAt).toLocaleString('ka-GE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
+    :'დასრულდა';
+  $('live-word').textContent=live?'LIVE':'ENDED';
+  $('live-word').style.color=live?'var(--oxblood)':'var(--taupe)';
+  $('live-dot').style.display=live?'':'none';
+  const w=WATCH.includes(l.id);
+  $('watch-btn').innerHTML=ic(w?'starF':'star');
+  $('watch-btn').classList.toggle('on',w);
+  const btn=$('bidbtn');
+  if(live){ btn.disabled=false; btn.textContent='დადე ბიდი — '+fmt(l.price+l.step); }
+  else{ btn.disabled=true;
+    btn.textContent=l.bidCount?('გაიყიდა '+fmt(l.price)+' — '+l.topBidder):'დასრულდა გაყიდვის გარეშე';
+    if(!l.finalized) DB.finalize(l.id);
+  }
+}
+setInterval(tick,1000);
+function openArtistFromLot(){ if(currentLotData) openArtist(currentLotData.ownerUid); }
+
+/* ================================================================
+   SELL
+================================================================ */
+function renderSellGate(){
+  const locked=!ME||ME.role!=='artist';
+  $('sell-form').style.display=locked?'none':'';
+  $('sell-locked').style.display=locked?'':'none';
+  if(locked) $('sell-locked-msg').textContent = ME
+    ? 'ნამუშევრის ატვირთვა მხოლოდ მხატვრის ანგარიშით შეიძლება. შენი ანგარიში კოლექციონერისაა — დაარეგისტრირე მხატვრის ანგარიში ან მოგვწერე როლის შესაცვლელად.'
+    : 'ნამუშევრის ასატვირთად საჭიროა მხატვრის ანგარიში — რეგისტრაცია 30 წამია.';
+}
+let uploads=[];
+const drop=$('drop');
+;['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag');}));
+;['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag');}));
+drop.addEventListener('drop',e=>handleFiles(e.dataTransfer.files));
+function handleFiles(files){
+  const room=5-uploads.length;
+  if(room<=0){ toast('მაქსიმუმ 5 ფოტო'); return; }
+  const list=[...files].filter(f=>f.type.startsWith('image/')).slice(0,room);
+  if([...files].length>room) toast(`დაემატა მხოლოდ ${room} — ლიმიტი 5 ფოტოა`);
+  list.forEach(file=>{
+    const img=new Image();
+    img.onload=()=>{
+      const MAX=800,sc=Math.min(1,MAX/Math.max(img.width,img.height));
+      const c=document.createElement('canvas');
+      c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      let q=.75, out=c.toDataURL('image/jpeg',q);
+      while(out.length>250000&&q>.4){ q-=.1; out=c.toDataURL('image/jpeg',q); }
+      uploads.push(out);
+      URL.revokeObjectURL(img.src);
+      renderPreviews();
+    };
+    img.onerror=()=>toast('ფოტო ვერ წაიკითხა: '+file.name);
+    img.src=URL.createObjectURL(file);
+  });
+  $('file-in').value='';
+}
+function renderPreviews(){
+  $('up-count').textContent=uploads.length+' / 5 ატვირთული';
+  $('previews').innerHTML=uploads.map((u,i)=>`
+    <div class="prev" draggable="true" style="background-image:url(${u})"
+      ondragstart="event.dataTransfer.setData('text/plain',${i})"
+      ondragover="event.preventDefault()" ondrop="reorder(event,${i})">
+      ${i===0?'<span class="main-tag">მთავარი</span>':''}
+      <button class="del" onclick="uploads.splice(${i},1);renderPreviews()">✕</button>
+    </div>`).join('');
+}
+function reorder(e,to){
+  e.preventDefault();
+  const from=+e.dataTransfer.getData('text/plain');
+  if(isNaN(from)||from===to) return;
+  const [x]=uploads.splice(from,1); uploads.splice(to,0,x); renderPreviews();
+}
+async function publishLot(){
+  if(!ME||ME.role!=='artist'){ renderSellGate(); return; }
+  const title=$('f-title').value.trim(),
+        start=Math.floor(+$('f-start').value), step=Math.floor(+$('f-step').value);
+  if(!uploads.length) return toast('ატვირთე მინიმუმ 1 ფოტო');
+  if(!title) return toast('შეიყვანე ნამუშევრის სახელი');
+  if(!start||start<1) return toast('შეიყვანე საწყისი ფასი');
+  if(!step||step<1) return toast('შეიყვანე ბიდის ბიჯი');
+  if(!$('f-pay').value.trim()) return toast('შეიყვანე გადახდის დეტალები — გამარჯვებულს დასჭირდება');
+  $('publish-btn').disabled=true; $('publish-btn').textContent='ქვეყნდება…';
+  try{
+    const id=await DB.createLot({
+      title, artist:ME.name, ownerUid:ME.uid, ownerName:ME.name,
+      desc:$('f-desc').value.trim(), medium:$('f-medium').value.trim()||'—',
+      size:$('f-size').value.trim()||'—', loc:$('f-loc').value.trim(),
+      start, step, price:start, pay:$('f-pay').value.trim(),
+      deal:{status:'awaiting'},
+      endsAt:Date.now()+(+$('f-dur').value)*3600e3, createdAt:Date.now()
+    },[...uploads]);
+    uploads=[]; renderPreviews();
+    ['f-title','f-desc','f-medium','f-size','f-start','f-step','f-loc','f-pay'].forEach(id=>$(id).value='');
+    toast('აუქციონი გამოქვეყნდა'); openLot(id);
+  }catch(e){ toast('ვერ გამოქვეყნდა: '+(e.message||e.code)); }
+  $('publish-btn').disabled=false; $('publish-btn').textContent='გამოაქვეყნე აუქციონი';
+}
+
+/* ================================================================
+   ARTIST / USER PAGE
+================================================================ */
+let viewedUid=null;
+function openArtist(uid,push=true){
+  if(!uid) return;
+  viewedUid=uid;
+  nav('artist',false);
+  if(push) location.hash='user='+uid;
+  renderArtist();
+  window.scrollTo({top:0});
+}
+function coverClick(){ if(ME&&ME.uid===viewedUid) $('cover-in').click(); }
+function handleCover(file){
+  if(!file||!file.type.startsWith('image/')) return;
+  const img=new Image();
+  img.onload=async()=>{
+    const W=1000,H=340,c=document.createElement('canvas');
+    c.width=W; c.height=H;
+    const ctx=c.getContext('2d');
+    const scale=Math.max(W/img.width,H/img.height);
+    const dw=img.width*scale, dh=img.height*scale;
+    ctx.drawImage(img,(W-dw)/2,(H-dh)/2,dw,dh);
+    let q=.75,out=c.toDataURL('image/jpeg',q);
+    while(out.length>200000&&q>.4){ q-=.1; out=c.toDataURL('image/jpeg',q); }
+    URL.revokeObjectURL(img.src);
+    try{ await DB.updateProfile({cover:out}); toast('ბანერი განახლდა'); renderArtist(); }
+    catch(e){ toast('ვერ აიტვირთა'); }
+  };
+  img.onerror=()=>toast('ფოტო ვერ წაიკითხა');
+  img.src=URL.createObjectURL(file);
+  $('cover-in').value='';
+}
+function avatarClick(){
+  if(ME&&ME.uid===viewedUid) $('avatar-in').click();
+}
+function handleAvatar(file){
+  if(!file||!file.type.startsWith('image/')) return;
+  const img=new Image();
+  img.onload=async()=>{
+    const S=260, c=document.createElement('canvas');
+    c.width=S; c.height=S;
+    const ctx=c.getContext('2d');
+    const side=Math.min(img.width,img.height);
+    ctx.drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,S,S);
+    let q=.8,out=c.toDataURL('image/jpeg',q);
+    while(out.length>120000&&q>.4){ q-=.1; out=c.toDataURL('image/jpeg',q); }
+    URL.revokeObjectURL(img.src);
+    try{ await DB.updateProfile({avatar:out}); toast('ფოტო განახლდა'); renderArtist(); renderAcct(); }
+    catch(e){ toast('ვერ აიტვირთა'); }
+  };
+  img.onerror=()=>toast('ფოტო ვერ წაიკითხა');
+  img.src=URL.createObjectURL(file);
+  $('avatar-in').value='';
+}
+function avatarOf(uid){
+  const u=USERS.find(x=>x.uid===uid);
+  return u?.avatar||null;
+}
+function renderArtist(){
+  const u=USERS.find(x=>x.uid===viewedUid);
+  const lots=LOTS.filter(l=>l.ownerUid===viewedUid);
+  const name=u?.name||lots[0]?.artist||'მომხმარებელი';
+  const st=u?.stats||{sold:0,bought:0,reactions:0,bids:0,totalSales:0};
+  const isArtist=(u?.role==='artist')||lots.length>0;
+  const av=u?.avatar;
+  const initEl=$('a-initial');
+  if(av){ initEl.style.backgroundImage=`url(${av})`; initEl.textContent=''; }
+  else { initEl.style.backgroundImage=''; initEl.textContent=(name[0]||'A').toUpperCase(); }
+  $('a-avatar').classList.toggle('editable', !!(ME&&ME.uid===viewedUid));
+  $('a-cam').innerHTML=ic('camera');
+  const cv=$('a-cover');
+  cv.classList.toggle('editable', !!(ME&&ME.uid===viewedUid));
+  $('cover-edit-btn').innerHTML=ic('camera')+' ბანერის შეცვლა';
+  cv.style.backgroundImage = u?.cover
+    ? `linear-gradient(180deg,rgba(43,38,32,.05),rgba(43,38,32,.18)),url(${u.cover})`
+    : '';
+  $('a-name').textContent=name;
+  $('a-role').textContent=isArtist?'მხატვარი':'კოლექციონერი';
+  $('a-badges').innerHTML=badgeHtml(isArtist?artistBadges(st):collectorBadges(st))||'<span class="a-badge">ახალი წევრი</span>';
+  $('a-bio').textContent=u?.bio||'ბიოგრაფია ჯერ არაა დამატებული.';
+  $('a-stats').innerHTML=isArtist?`
+    <div><b>${lots.length}</b><span>ლოტი</span></div>
+    <div><b>${st.sold}</b><span>გაყიდული</span></div>
+    <div><b>${fmt(st.totalSales)}</b><span>ჯამური</span></div>
+    <div><b>${st.reactions}</b><span>რეაქცია</span></div>`:`
+    <div><b>${st.bids}</b><span>ბიდი</span></div>
+    <div><b>${st.bought}</b><span>შენაძენი</span></div>`;
+  const rc=st.ratingCount||0;
+  if(rc) $('a-stats').innerHTML+=`<div><b style="color:var(--gilt-deep)">★ ${(st.ratingSum/rc).toFixed(1)}</b><span>${rc} შეფასება</span></div>`;
+  const mine=ME&&ME.uid===viewedUid;
+  let acts='';
+  if(mine) acts=`<button class="btn btn-line btn-sm" onclick="editBio()">ბიოს რედაქტირება</button>`;
+  else if(ME){
+    const isFriend=(ME.friends||[]).includes(viewedUid);
+    const sent=(ME.reqOut||[]).includes(viewedUid);
+    const incoming=(ME.reqIn||[]).includes(viewedUid);
+    if(isFriend) acts=`<button class="btn btn-ink btn-sm" onclick="dmUser('${viewedUid}','${esc(name)}')">${ic('chat')} მიწერე</button><span class="a-badge gold">${ic('check')} მეგობრები</span>`;
+    else if(incoming) acts=`<button class="btn btn-ink btn-sm" onclick="acceptReq('${viewedUid}')">${ic('check')} დაადასტურე</button>`;
+    else if(sent) acts=`<span class="a-badge">${ic('clock')} მოთხოვნა გაგზავნილია</span>`;
+    else acts=`<button class="btn btn-ink btn-sm" onclick="addFriend('${viewedUid}')">${ic('user')} დაამატე</button>`;
+  }
+  $('a-actions').innerHTML=acts;
+  /* my own requests inbox */
+  const reqs=mine?(ME.reqIn||[]):[];
+  $('a-requests').innerHTML=reqs.length?`<div class="about-card" style="border-left-color:var(--oxblood)">
+    <h3>მეგობრობის მოთხოვნები</h3>
+    ${reqs.map(uid=>{
+      const u=USERS.find(x=>x.uid===uid);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0">
+        <div class="lb-av" style="${u?.avatar?`background-image:url(${u.avatar})`:''}">${u?.avatar?'':esc((u?.name||'?')[0])}</div>
+        <b style="flex:1;font-size:.88rem;cursor:pointer" onclick="openArtist('${uid}')">${esc(u?.name||'მომხმარებელი')}</b>
+        <button class="btn btn-ink btn-sm" onclick="acceptReq('${uid}')">დადასტურება</button>
+        <button class="btn btn-line btn-sm" onclick="declineReq('${uid}')">უარყოფა</button>
+      </div>`;
+    }).join('')}
+  </div>`:'';
+  $('a-bio-edit').style.display='none'; $('a-bio').style.display='';
+  $('a-grid').innerHTML=lots.length?lots.map(l=>{
+    const live=isLive(l), sold=!live&&l.bidCount>0;
+    return `<div class="card" onclick="openLot('${l.id}')">
+      <div class="card-img" style="background-image:url(${l.cover})">
+        <span class="badge ${live?'':(sold?'sold':'ended')}">${live?'LIVE · '+fmt(l.price):(sold?'გაიყიდა · '+fmt(l.price):'დასრულდა')}</span>
+      </div>
+      <div class="card-body"><h3>${esc(l.title)}</h3>
+        <div class="by">${live?(l.bidCount+' ბიდი მიმდინარეობს'):new Date(l.endsAt).toLocaleDateString('ka-GE',{day:'numeric',month:'long'})}</div>
+      </div></div>`;
+  }).join(''):'<div class="empty">ლოტები ჯერ არაა</div>';
+}
+function editBio(){
+  $('a-bio').style.display='none'; $('a-bio-edit').style.display='';
+  $('a-bio-input').value=ME.bio||'';
+}
+async function saveBio(){
+  try{ await DB.updateProfile({bio:$('a-bio-input').value.trim().slice(0,1000)});
+    toast('ბიო შენახულია'); renderArtist();
+  }catch(e){ toast('ვერ შეინახა'); }
+}
+
+/* ================================================================
+   LEADERBOARD
+================================================================ */
+let lbMode='artists';
+function lbTab(m){ lbMode=m;
+  $('lbt-artists').classList.toggle('on',m==='artists');
+  $('lbt-collectors').classList.toggle('on',m==='collectors');
+  renderBoard();
+}
+function renderBoard(){
+  let rows;
+  if(lbMode==='artists'){
+    rows=USERS.filter(u=>u.role==='artist')
+      .map(u=>({...u,score:(u.stats?.reactions||0)+((u.stats?.sold||0)*20)}))
+      .sort((a,b)=>b.score-a.score);
+  } else {
+    rows=USERS.filter(u=>u.role==='collector'||((u.stats?.bids||0)>0&&u.role!=='artist'))
+      .map(u=>({...u,score:((u.stats?.bought||0)*50)+(u.stats?.bids||0)}))
+      .sort((a,b)=>b.score-a.score);
+  }
+  rows=rows.filter(u=>u.score>0).slice(0,50);
+  $('lb-list').innerHTML=rows.length?rows.map((u,i)=>{
+    const st=u.stats||{};
+    const badges=lbMode==='artists'?artistBadges(st):collectorBadges(st);
+    return `<div class="lb-row" onclick="openArtist('${u.uid}')">
+      <div class="lb-rank ${i<3?'r'+(i+1):''}">${i+1}</div>
+      <div class="lb-av" style="${u.avatar?`background-image:url(${u.avatar})`:''}">${u.avatar?'':esc((u.name||'?')[0])}</div>
+      <div class="lb-name"><b>${esc(u.name)}</b><div class="badge-row">${badgeHtml(badges.slice(0,2))}</div></div>
+      <div class="lb-score"><b>${u.score}</b><span>ქულა</span></div>
+    </div>`;
+  }).join(''):'<div class="empty">ჯერ ცარიელია — ქულები რეაქციებით, ბიდებით და გაყიდვებით გროვდება</div>';
+}
+
+/* ================================================================
+   CHAT
+================================================================ */
+let currentChatId=null, chatList=[];
+async function addFriend(uid){
+  if(!requireAuth('მეგობრობისთვის ანგარიშია საჭირო')) return;
+  try{ await DB.sendFriendReq(uid); toast('მოთხოვნა გაიგზავნა'); }catch(e){ toast('ვერ გაიგზავნა'); }
+  ME.reqOut=[...(ME.reqOut||[]),uid]; renderArtist();
+}
+async function acceptReq(uid){
+  try{ await DB.acceptFriend(uid); toast('ახლა მეგობრები ხართ'); }catch(e){ toast('შეცდომა'); }
+  ME.friends=[...(ME.friends||[]),uid]; ME.reqIn=(ME.reqIn||[]).filter(x=>x!==uid); renderArtist();
+}
+async function declineReq(uid){
+  try{ await DB.declineFriend(uid); }catch(e){}
+  ME.reqIn=(ME.reqIn||[]).filter(x=>x!==uid); renderArtist();
+}
+function canDM(uid){
+  if(!ME) return false;
+  if((ME.friends||[]).includes(uid)) return true;
+  /* auction pair: winner ↔ artist of any shared finished lot */
+  return LOTS.some(l=>!isLive(l)&&l.bidCount>0&&
+    ((l.ownerUid===ME.uid&&l.topBidderUid===uid)||(l.topBidderUid===ME.uid&&l.ownerUid===uid)));
+}
+async function dmUser(uid,name){
+  if(!requireAuth('შეტყობინებისთვის ანგარიშია საჭირო')) return;
+  if(uid===ME.uid) return;
+  if(!canDM(uid)){ toast('პირადი მიმოწერისთვის ჯერ დაამეგობრდით'); return; }
+  const id=await DB.startChat(uid,name);
+  nav('chat'); openChat(id);
+}
+function messageArtist(){
+  if(!currentLotData) return;
+  if(!requireAuth('შეტყობინებისთვის ანგარიშია საჭირო')) return;
+  const uid=currentLotData.ownerUid, name=currentLotData.ownerName||currentLotData.artist;
+  if(canDM(uid)){ dmUser(uid,name); }
+  else { addFriend(uid); toast('გაეგზავნა მეგობრობის მოთხოვნა ავტორს — დადასტურების შემდეგ მიწერ'); }
+}
+function renderChatPage(){
+  if(!ME){ $('chat-list').innerHTML='<div style="padding:18px;font-size:.85rem;color:var(--ink-soft)">ჩატისთვის შედი ანგარიშზე</div>'; return; }
+  renderChatList();
+}
+function renderChatList(){
+  $('chat-list').innerHTML=chatList.length?chatList.map(c=>{
+    const other=c.users.find(u=>u!==ME.uid);
+    const name=c.names?.[other]||'მომხმარებელი';
+    const cav=avatarOf(other);
+    return `<div class="chat-item ${c.id===currentChatId?'on':''}" onclick="openChat('${c.id}')">
+      <div class="lb-av" style="${cav?`background-image:url(${cav})`:''}">${cav?'':esc(name[0])}</div>
+      <div><b>${esc(name)}</b><p>${esc(c.last||'ახალი საუბარი')}</p></div>
+    </div>`;
+  }).join(''):'<div style="padding:18px;font-size:.85rem;color:var(--ink-soft)">საუბრები ჯერ არაა — დაიწყე ლოტის გვერდიდან</div>';
+}
+function openChat(id){
+  currentChatId=id;
+  const c=chatList.find(x=>x.id===id);
+  const other=c?.users.find(u=>u!==ME.uid);
+  $('chat-head').innerHTML=ic('chat')+' '+esc(c?.names?.[other]||'საუბარი');
+  $('chat-input-row').style.display='flex';
+  renderChatList();
+  DB.offMsgs?.(currentChatId);
+  DB.onMsgs(id,msgs=>{
+    $('chat-msgs').innerHTML=msgs.map(m=>{
+      const t=new Date(m.t).toLocaleTimeString('ka-GE',{hour:'2-digit',minute:'2-digit'});
+      return `<div class="msg ${m.from===ME.uid?'me':'them'}">${esc(m.text)}<span class="mt">${t}</span></div>`;
+    }).join('')||'<div class="chat-empty">დაწერე პირველი შეტყობინება</div>';
+    const box=$('chat-msgs'); box.scrollTop=box.scrollHeight;
+  });
+}
+async function sendMsg(){
+  const inp=$('chat-input'); if(!inp.value.trim()||!currentChatId) return;
+  const text=inp.value.trim().slice(0,800); inp.value='';
+  try{ await DB.sendMsg(currentChatId,text); }catch(e){ toast('ვერ გაიგზავნა'); }
+}
+
+/* ================================================================
+   SETUP
+================================================================ */
+/* ================================================================
+   ADMIN GATE — setup page is owner-only
+   Unlock by visiting:  yoursite/?admin=gavel2026
+   (change ADMIN_KEY below to your own secret)
+================================================================ */
+const ADMIN_KEY='gavel2026';
+let IS_ADMIN=false;
+try{
+  const qk=new URLSearchParams(location.search).get('admin');
+  if(qk===ADMIN_KEY){ localStorage.setItem('agv-admin','1'); IS_ADMIN=true; }
+  else IS_ADMIN=localStorage.getItem('agv-admin')==='1';
+}catch(e){}
+function adminExit(){ try{ localStorage.removeItem('agv-admin'); }catch(e){} location.href=location.pathname; }
+
+function renderSetup(){
+  const live=!!getCfg();
+  $('setup-status').innerHTML=live
+    ?'<b style="color:#3f6b3a">ლაივ რეჟიმი ჩართულია</b> — ყველა მომხმარებელი ერთსა და იმავე მონაცემებს ხედავს რეალურ დროში.'
+    :'<b style="color:var(--oxblood)">დემო რეჟიმი</b> — მონაცემები მხოლოდ ამ მოწყობილობაზეა. ლაივზე გადასასვლელად მიჰყევი ინსტრუქციას.';
+  if(live) $('fb-config').value=JSON.stringify(getCfg(),null,2);
+}
+function saveConfig(){
+  let raw=$('fb-config').value.trim();
+  try{
+    raw=raw.replace(/^const\s+\w+\s*=\s*/,'').replace(/;$/,'');
+    const j=Function('return ('+raw+')')();
+    if(!j.apiKey||!j.projectId) throw 0;
+    localStorage.setItem('agv-fbcfg',JSON.stringify(j));
+    toast('ჩაირთო — გვერდი გადაიტვირთება'); setTimeout(()=>location.reload(),900);
+  }catch(e){ toast('კონფიგი ვერ წაიკითხა — ჩასვი firebaseConfig ობიექტი სრულად'); }
+}
+function clearConfig(){ localStorage.setItem('agv-fbcfg','null'); localStorage.removeItem('agv-fbcfg'); toast('ბრაუზერის კონფიგი გასუფთავდა'); setTimeout(()=>location.reload(),700); }
+
+/* ================================================================
+   BOOT
+================================================================ */
+$('mode-pill').textContent = cfg?'ლაივი':'დემო';
+$('mode-pill').classList.toggle('live',!!cfg);
+/* the mode pill + setup links are owner-only */
+if(!IS_ADMIN){
+  $('mode-pill').style.display='none';
+  document.querySelectorAll('[onclick*="setup"]').forEach(el=>{
+    if(el.tagName==='A') el.style.display='none';
+  });
+} else {
+  $('mode-pill').title='ადმინ რეჟიმი — გამოსვლა: დააჭირე ორჯერ';
+  $('mode-pill').ondblclick=adminExit;
+}
+
+DB.onAuth(u=>{
+  ME=u;
+  renderAcct();
+  renderBell(); computeNotifs();
+  if(u){
+    askNotifPermission();
+    /* global chat subscription so message alerts arrive on any page */
+    DB.onChats(cs=>{ myChats=cs; chatList=cs;
+      if($('p-chat').classList.contains('on')) renderChatList();
+      computeNotifs(); });
+  } else { myChats=[]; chatList=[]; }
+  if($('p-sell').classList.contains('on')) renderSellGate();
+  if($('p-chat').classList.contains('on')) renderChatPage();
+});
+DB.init(cfg).then(()=>{
+  DB.onLots(list=>{ LOTS=list; renderGrid(); renderStats(); buildDeck(); computeNotifs();
+    if($('p-artist').classList.contains('on')) renderArtist(); });
+  DB.onUsers(list=>{ USERS=list;
+    if(ME){ const fresh=USERS.find(u=>u.uid===ME.uid); if(fresh) ME={...ME,...fresh}; renderAcct(); }
+    renderStats(); computeNotifs();
+    if($('p-board').classList.contains('on')) renderBoard();
+    if($('p-artist').classList.contains('on')) renderArtist(); });
+  route();
+});
+setInterval(()=>{ if($('p-home').classList.contains('on')) renderGrid(); },30000);
+
+/* ================================================================
+   NOTIFICATIONS — derived from live data, no server needed
+================================================================ */
+let NOTIFS=[], notifSeen=0, myChats=[], alerted={};
+try{ notifSeen=+(localStorage.getItem('agv-seen')||0); }catch(e){}
+try{ alerted=JSON.parse(localStorage.getItem('agv-alerted')||'{}'); }catch(e){}
+
+function computeNotifs(){
+  if(!ME){ NOTIFS=[]; renderBell(); return; }
+  const out=[];
+  const now=Date.now();
+  LOTS.forEach(l=>{
+    const iOwn = l.ownerUid===ME.uid;
+    const iBid = (l.bids||[]).some(b=>b.uid===ME.uid);
+    const iLead = l.topBidderUid===ME.uid;
+    const live = isLive(l);
+    const lastBid = (l.bids||[])[0];
+    /* seller: new bid on my lot */
+    if(iOwn && lastBid && live){
+      out.push({id:'bid-'+l.id+'-'+lastBid.t, t:lastBid.t, lot:l.id, urgent:false, ic:'gavel',
+        title:'ახალი ბიდი შენს ლოტზე', body:`${l.title} — ${fmt(l.price)} (${lastBid.who})`});
+    }
+    /* bidder: outbid */
+    if(iBid && !iLead && live && lastBid){
+      out.push({id:'out-'+l.id+'-'+lastBid.t, t:lastBid.t, lot:l.id, urgent:true, ic:'fire',
+        title:'შენ გადაგაფარეს', body:`${l.title} — ახლა ${fmt(l.price)}`});
+    }
+    /* ending soon: my watchlist or lots I bid on */
+    if(live && (WATCH.includes(l.id)||iBid) && l.endsAt-now < 3600e3){
+      out.push({id:'soon-'+l.id, t:now, lot:l.id, urgent:true, ic:'clock',
+        title:'მალე სრულდება', body:`${l.title} — ${Math.max(1,Math.round((l.endsAt-now)/60000))} წუთი`});
+    }
+    /* ended outcomes */
+    if(!live && l.bidCount>0){
+      if(iLead) out.push({id:'won-'+l.id, t:l.endsAt, lot:l.id, urgent:false, ic:'trophy',
+        title:'შენ მოიგე აუქციონი', body:`${l.title} — ${fmt(l.price)} · შეათანხმე გადახდა`});
+      if(iOwn) out.push({id:'sold-'+l.id, t:l.endsAt, lot:l.id, urgent:false, ic:'trophy',
+        title:'შენი ლოტი გაიყიდა', body:`${l.title} — ${fmt(l.price)} (${l.topBidder})`});
+    }
+    if(!live && l.bidCount===0 && iOwn){
+      out.push({id:'nosale-'+l.id, t:l.endsAt, lot:l.id, urgent:false, ic:'clock',
+        title:'აუქციონი დასრულდა ბიდების გარეშე', body:l.title});
+    }
+    /* deal steps needing my action */
+    const st=l.deal?.status;
+    if(!live && l.bidCount>0){
+      if(iLead && st==='shipped') out.push({id:'ship-'+l.id, t:l.endsAt+1, lot:l.id, urgent:false, ic:'check',
+        title:'ნამუშევარი გამოგზავნილია', body:`${l.title} — დაადასტურე მიღება`});
+      if(iOwn && st==='paid') out.push({id:'paid-'+l.id, t:l.endsAt+1, lot:l.id, urgent:false, ic:'check',
+        title:'მყიდველმა გადაიხადა', body:`${l.title} — გააგზავნე ნამუშევარი`});
+    }
+  });
+  /* friend requests */
+  (ME.reqIn||[]).forEach(uid=>{
+    const u=USERS.find(x=>x.uid===uid);
+    out.push({id:'req-'+uid, t:now, user:ME.uid, urgent:false, ic:'user',
+      title:'მეგობრობის მოთხოვნა', body:(u?.name||'მომხმარებელი')+' გელოდება'});
+  });
+  /* unread chat messages */
+  myChats.forEach(c=>{
+    if(c.lastFrom && c.lastFrom!==ME.uid && c.updatedAt>notifSeen){
+      const other=c.users.find(u=>u!==ME.uid);
+      out.push({id:'msg-'+c.id+'-'+c.updatedAt, t:c.updatedAt, chat:c.id, urgent:false, ic:'chat',
+        title:'ახალი შეტყობინება', body:`${c.names?.[other]||'მომხმარებელი'}: ${c.last||''}`});
+    }
+  });
+  NOTIFS=out.sort((a,b)=>b.t-a.t).slice(0,40);
+  renderBell();
+  pushBrowserAlerts();
+}
+function unreadCount(){ return NOTIFS.filter(n=>n.t>notifSeen).length; }
+function renderBell(){
+  const btn=$('bell-btn');
+  btn.classList.toggle('show',!!ME);
+  btn.innerHTML=ic('bell')+`<span id="bell-count" class="${unreadCount()?'show':''}">${unreadCount()||''}</span>`;
+  const c=unreadCount();
+  document.title=(c?`(${c}) `:'')+'ARTGAVEL · ქართული ხელოვნების აუქციონი';
+  if($('notif-panel').classList.contains('open')) renderNotifList();
+}
+function renderNotifList(){
+  $('notif-list').innerHTML=NOTIFS.length?NOTIFS.map(n=>{
+    const mins=Math.round((Date.now()-n.t)/60000);
+    const tm=mins<1?'ახლა':mins<60?mins+'წთ':mins<1440?Math.round(mins/60)+'სთ':Math.round(mins/1440)+'დღე';
+    return `<div class="nitem ${n.t>notifSeen?'unread':''} ${n.urgent?'urgent':''}" onclick="openNotif('${n.id}')">
+      <div class="nic">${ic(n.ic)}</div>
+      <div style="flex:1;min-width:0"><b>${esc(n.title)}</b><p>${esc(n.body)}</p><div class="nt">${tm}</div></div>
+    </div>`;
+  }).join(''):'<div class="nempty">შეტყობინებები ჯერ არაა</div>';
+}
+function toggleNotifs(e){
+  e?.stopPropagation();
+  const p=$('notif-panel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) renderNotifList();
+}
+document.addEventListener('click',e=>{
+  const p=$('notif-panel');
+  if(p.classList.contains('open')&&!p.contains(e.target)&&e.target.id!=='bell-btn') p.classList.remove('open');
+});
+function markAllSeen(){
+  notifSeen=Date.now();
+  try{ localStorage.setItem('agv-seen',notifSeen); }catch(e){}
+  renderBell(); renderNotifList();
+}
+function openNotif(id){
+  const n=NOTIFS.find(x=>x.id===id); if(!n) return;
+  notifSeen=Math.max(notifSeen,n.t);
+  try{ localStorage.setItem('agv-seen',notifSeen); }catch(e){}
+  $('notif-panel').classList.remove('open');
+  if(n.lot) openLot(n.lot);
+  else if(n.chat){ nav('chat'); setTimeout(()=>openChat(n.chat),120); }
+  else if(n.user) openArtist(ME.uid);
+  renderBell();
+}
+/* browser pop-up alerts (free, works while tab is open) */
+function askNotifPermission(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission==='default') Notification.requestPermission().catch(()=>{});
+}
+function pushBrowserAlerts(){
+  if(!('Notification' in window)||Notification.permission!=='granted') return;
+  let changed=false;
+  NOTIFS.filter(n=>n.urgent&&n.t>notifSeen&&!alerted[n.id]).slice(0,2).forEach(n=>{
+    try{ new Notification(n.title,{body:n.body,icon:'hero1.jpg'}); }catch(e){}
+    alerted[n.id]=1; changed=true;
+  });
+  if(changed){ try{ localStorage.setItem('agv-alerted',JSON.stringify(alerted)); }catch(e){} }
+}
+setInterval(computeNotifs,60000);
+
+/* ================================================================
+   DISCOVER DECK — swipe right = favorite
+================================================================ */
+let deckQueue=[], deckBuilt=false, dragState=null;
+function buildDeck(){
+  const seen=new Set(deckQueue.map(l=>l.id));
+  const fresh=LOTS.filter(l=>isLive(l)&&!WATCH.includes(l.id)&&!seen.has(l.id));
+  deckQueue=[...deckQueue.filter(l=>isLive(l)&&LOTS.some(x=>x.id===l.id)),...fresh];
+  renderDeck();
+}
+function renderDeck(){
+  const d=$('deck'); if(!d) return;
+  $('deck-open-btn').innerHTML=ic('image');
+  $('deck-like-btn').innerHTML=ic('starF');
+  $('deck-fav-link').innerHTML=WATCH.length?`${ic('starF')} ჩემი სია — ${WATCH.length} ნამუშევარი`:'მოწონებულები ინახება „ჩემი სია"-ში';
+  if(!deckQueue.length){
+    d.innerHTML=`<div class="deck-empty">${ic('check','ic-lg')}<b>ყველა ლოტი ნანახია</b><span style="font-size:.82rem">ახალი ნამუშევრები აქ გამოჩნდება</span></div>`;
+    return;
+  }
+  /* render top 3 cards stacked */
+  d.innerHTML=deckQueue.slice(0,3).map((l,i)=>`
+    <div class="deck-card" data-id="${l.id}" style="z-index:${10-i};transform:translateY(${i*10}px) scale(${1-i*.04})">
+      <div class="di" style="background-image:url(${l.cover})"></div>
+      <div class="db">
+        <h3>${esc(l.title)}</h3><div class="by">by ${esc(l.artist)}${l.size&&l.size!=='—'?' · '+esc(l.size):''}</div>
+        <div class="dp"><b>${fmt(l.price)}</b><span>${l.bidCount?'▲ '+l.bidCount+' ბიდი':'საწყისი ფასი'}</span></div>
+      </div>
+      <div class="deck-stamp like">ჩემი სია</div>
+      <div class="deck-stamp skip">შემდეგი</div>
+    </div>`).reverse().join('');
+  attachDrag();
+}
+function topCard(){ return $('deck')?.querySelector(`[data-id="${deckQueue[0]?.id}"]`); }
+function attachDrag(){
+  const card=topCard(); if(!card) return;
+  card.addEventListener('pointerdown',e=>{
+    dragState={x0:e.clientX,y0:e.clientY,dx:0,moved:false};
+    card.setPointerCapture(e.pointerId);
+    card.classList.add('dragging');
+  });
+  card.addEventListener('pointermove',e=>{
+    if(!dragState) return;
+    dragState.dx=e.clientX-dragState.x0;
+    const dy=e.clientY-dragState.y0;
+    if(Math.abs(dragState.dx)>6||Math.abs(dy)>6) dragState.moved=true;
+    card.style.transform=`translate(${dragState.dx}px,${dy*.35}px) rotate(${dragState.dx*.06}deg)`;
+    card.querySelector('.deck-stamp.like').style.opacity=Math.min(1,Math.max(0,dragState.dx/90));
+    card.querySelector('.deck-stamp.skip').style.opacity=Math.min(1,Math.max(0,-dragState.dx/90));
+  });
+  card.addEventListener('pointerup',()=>{
+    if(!dragState) return;
+    const dx=dragState.dx, moved=dragState.moved; dragState=null;
+    card.classList.remove('dragging');
+    if(Math.abs(dx)>110){ deckSwipe(dx>0?1:-1,true,dx); }
+    else if(!moved){ deckOpen(); }
+    else{ card.style.transform=''; card.querySelectorAll('.deck-stamp').forEach(s=>s.style.opacity=0); }
+  });
+  card.addEventListener('pointercancel',()=>{ dragState=null; card.classList.remove('dragging'); card.style.transform=''; });
+}
+function deckSwipe(dir,fromDrag=false,dx=0){
+  const l=deckQueue[0]; if(!l) return;
+  const card=topCard();
+  if(card){
+    card.style.transform=`translate(${dir>0?520:-520}px,${dx*.2||-20}px) rotate(${dir*22}deg)`;
+    card.style.opacity='0';
+  }
+  if(dir>0&&!WATCH.includes(l.id)){ WATCH.push(l.id); saveWatch(); toast(ic('starF')+' დაემატა ჩემს სიაში'); }
+  deckQueue.shift();
+  setTimeout(renderDeck, fromDrag?280:200);
+  renderGrid();
+}
+function deckOpen(){ if(deckQueue[0]) openLot(deckQueue[0].id); }
+
+(function(){
+  const imgs=['hero1.jpg','hero2.jpg','hero3.jpg','hero4.jpg','hero5.jpg','hero6.jpg'];
+  const track=$('hero-track');
+  /* duplicate the set once for a seamless loop; eager load so motion is visible immediately */
+  track.innerHTML=[...imgs,...imgs].map(s=>`<img src="${s}" alt="" loading="eager" decoding="async" fetchpriority="high" onerror="this.remove()">`).join('');
+})();
+
+/* ================================================================
+   MUSIC — gallery ambience, persists across all pages (SPA)
+   Upload your MP3s to the repo root and list them here:
+================================================================ */
+const MUSIC=[
+  {title:'Track 1', src:'track1.mp3.mp3'},
+  {title:'Track 2', src:'track2.mp3.mp3'},
+  {title:'Track 3', src:'track3.mp3.mp3'},
+];
+let mIdx=0, mPlaying=false;
+const mEl=$('music-el');
+(function initMusic(){
+  if(!MUSIC.length) return;
+  $('music-toggle').innerHTML=ic('play');
+  $('music-next').innerHTML=ic('next');
+  $('music-title').textContent=MUSIC[0].title;
+  /* show the pill only if the first track actually exists */
+  fetch(MUSIC[0].src,{method:'HEAD'}).then(r=>{ if(r.ok) $('music-pill').classList.add('show'); }).catch(()=>{});
+  mEl.addEventListener('ended', musicNext);
+  mEl.addEventListener('error', ()=>{ if(mPlaying) musicNext(); });
+  $('music-pill').addEventListener('click',e=>{
+    if(e.target.closest('button')) return;
+    $('music-pill').classList.toggle('open');
+  });
+})();
+let collapseTimer=null;
+function flashOpen(){
+  const p=$('music-pill');
+  p.classList.add('open');
+  clearTimeout(collapseTimer);
+  collapseTimer=setTimeout(()=>p.classList.remove('open'),4500);
+}
+function musicLoad(){ mEl.src=MUSIC[mIdx].src; $('music-title').textContent=MUSIC[mIdx].title; }
+function musicToggle(){
+  if(!mEl.src) musicLoad();
+  if(mPlaying){ mEl.pause(); mPlaying=false; }
+  else { mEl.play().then(()=>{ mPlaying=true; updMusicUI(); flashOpen(); }).catch(()=>toast('ტრეკი ვერ ჩაიტვირთა — შეამოწმე ატვირთულია თუ არა ტრეკი')); }
+  updMusicUI();
+}
+function musicNext(){
+  mIdx=(mIdx+1)%MUSIC.length; musicLoad();
+  if(mPlaying) mEl.play().catch(()=>{});
+  updMusicUI(); flashOpen();
+}
+function updMusicUI(){
+  $('music-toggle').innerHTML=ic(mPlaying?'pause':'play');
+  $('eq').style.display=mPlaying?'inline-flex':'none';
+  if(!$('music-title').textContent&&MUSIC.length) $('music-title').textContent=MUSIC[mIdx].title;
+}
+</script>
+</body>
+</html>
